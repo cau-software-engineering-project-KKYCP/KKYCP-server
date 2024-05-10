@@ -185,17 +185,22 @@
 
 
 #   Domain Model
-![도메인모델](./domain model.jpg)
+![domain](./domain%20model.jpg)
 #   Design
 ##  -Project
 +   create
 
+![design](./design_project.jpg)
+
 ##  -Issue
 +   create
+
+![design](./design_Issue.jpg)
 
 ##  -Comment
 +   JPA의 도움으로, Project에 List<Comment> comments 필드를 넣고, comments.add()를 하면 자동으로 DB에 comment가 저장된다.
 
 
 #   ERD
+![erd](./erd.jpg)
 +   각 Role이 어떤 Privileges를 가지는 지는 어플리케이션 내부에서 결정된다.
