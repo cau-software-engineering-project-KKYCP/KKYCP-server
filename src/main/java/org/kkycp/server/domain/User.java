@@ -1,11 +1,23 @@
 package org.kkycp.server.domain;
 
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
 import java.util.List;
 
+@Entity
 public class User {
+    @Id
+    @GeneratedValue
     private Long id;
+
     private String username;
-    private List<Participation> participations;
+
+    @OneToMany(mappedBy = "user",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true,
+            fetch = FetchType.LAZY)
+    private List<Participation> participations = new ArrayList<>();
 
     @Override
     public final boolean equals(Object o) {
