@@ -7,6 +7,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
 import org.kkycp.server.RestDocsTestTemplate;
 import org.springframework.http.HttpHeaders;
+import org.springframework.transaction.annotation.Transactional;
 
 import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
 import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
@@ -25,6 +26,7 @@ public class SignUpAndLoginTest extends RestDocsTestTemplate {
 
     @Test
     @Order(1)
+    @Transactional
     public void signUp() throws Exception {
         mockMvc.perform(post("/signup")
                         .param("username", TEST_USERNAME)
