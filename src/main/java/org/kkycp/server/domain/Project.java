@@ -1,8 +1,9 @@
 package org.kkycp.server.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 import java.util.HashMap;
@@ -14,6 +15,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Project {
     @Id
     @GeneratedValue
@@ -21,15 +23,15 @@ public class Project {
 
     private String projectName;
 
-    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Issue> issues = new ArrayList<>();
-    private Map<User, Participation> participationByUser;
-    private List<Issue> issues;
+    @OneToMany(mappedBy = "participatedProject", cascade = CascadeType.ALL, orphanRemoval = true)
+    @MapKeyJoinColumn(name = "user_id")
+    private final Map<User, Participation> participationByUser = new HashMap<>();
 
-    public Project(User user, String projectName){
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private final List<Issue> issues = new ArrayList<>();
+
+    public Project(String projectName){
         this.projectName=projectName;
-        this.participationByUser = new HashMap<>();
-        this.participationByUser.put(user, new Participation(this));    //user를 현재 project의 participation으로 추가
     }
 
     public boolean isParticipant(User user){
