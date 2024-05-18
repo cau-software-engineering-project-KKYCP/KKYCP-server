@@ -12,3 +12,9 @@ operation::auth/signup[snippets='http-request,form-parameters,http-response,curl
 == 테스트 페이지 접근
 
 operation::auth/login[snippets='http-request,request-headers,http-response,curl-request,httpie-request']
+
+== 프로젝트
+
+=== 프로젝트 생성
+
+operation::project/create[snippets='http-request,request-fields,http-response,response-fields,curl-request,httpie-request']
