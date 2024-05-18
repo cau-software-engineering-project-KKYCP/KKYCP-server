@@ -1,10 +1,20 @@
 package org.kkycp.server.domain;
 
+import jakarta.persistence.*;
+import lombok.Getter;
+
+@Entity
+@Getter
 public class Participation {
+    @Id
+    @GeneratedValue
     private Long id;
+
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "project_id")
     private Project participatedProject;
 
-    public Participation(Project participatedProject){
-        this.participatedProject=participatedProject;//해당 project에 대해 참가정보 생성
-    }
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "user_id")
+    private User user;
 }

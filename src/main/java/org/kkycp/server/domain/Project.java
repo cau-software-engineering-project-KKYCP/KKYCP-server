@@ -1,5 +1,7 @@
 package org.kkycp.server.domain;
 
+import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.Getter;
 
 import java.time.LocalDate;
@@ -7,10 +9,20 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import java.util.ArrayList;
+import java.util.List;
+
+@Entity
 @Getter
 public class Project {
+    @Id
+    @GeneratedValue
     private Long id;
+
     private String projectName;
+
+    @OneToMany(mappedBy = "project", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Issue> issues = new ArrayList<>();
     private Map<User, Participation> participationByUser;
     private List<Issue> issues;
 
