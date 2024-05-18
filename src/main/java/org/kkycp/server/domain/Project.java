@@ -1,21 +1,23 @@
 package org.kkycp.server.domain;
 
+import lombok.Getter;
+
+import java.time.LocalDate;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+@Getter
 public class Project {
     private int id;
     private String projectName;
     private Map<User, Participation> participationByUser;
+    private List<Issue> issues;
 
     public Project(User user, String projectName){
         this.projectName=projectName;
         this.participationByUser = new HashMap<>();
         this.participationByUser.put(user, new Participation(this));    //user를 현재 project의 participation으로 추가
-    }
-
-    public int getId(){ // 새로 추가
-        return this.id;
     }
 
     public boolean isParticipant(User user){
@@ -26,8 +28,15 @@ public class Project {
             return true;
     }
 
-    public long reportIssue(report Report){
-        report Report = new report();
-        return Report.id;    
+    public Issue reportIssue(Report report, LocalDate reportedDay){
+        Issue newIssue = Issue.builder()
+                .title(report.getTitle())
+                .reporter(report.getReporter())
+                .description(report.getDescription())
+                .priority(report.getPriority())
+                .reportedDate(reportedDay)
+                .build();
+        issues.add(newIssue);
+        return newIssue;
     }
 }
