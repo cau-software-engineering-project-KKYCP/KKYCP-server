@@ -1,8 +1,10 @@
 package org.kkycp.server.domain;
 
 import jakarta.persistence.*;
+import lombok.Getter;
 
 @Entity
+@Getter
 public class Participation {
     @Id
     @GeneratedValue
