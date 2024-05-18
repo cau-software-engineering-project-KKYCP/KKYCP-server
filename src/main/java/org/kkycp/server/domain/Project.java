@@ -9,7 +9,7 @@ import java.util.Map;
 
 @Getter
 public class Project {
-    private int id;
+    private Long id;
     private String projectName;
     private Map<User, Participation> participationByUser;
     private List<Issue> issues;
