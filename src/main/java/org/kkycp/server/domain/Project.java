@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
@@ -36,10 +35,7 @@ public class Project {
 
     public boolean isParticipant(User user){
         Participation participation = participationByUser.get(user);    //user의 particiapation 정보를 가져옴
-        if(participation==null) //null일 경우 false
-            return false;
-        else
-            return true;
+        return participation != null;
     }
 
     public Issue reportIssue(Report report, LocalDate reportedDay){

@@ -7,8 +7,6 @@ import org.kkycp.server.services.ProjectService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Map;
-
 @RestController
 @RequestMapping("/project")
 @RequiredArgsConstructor
