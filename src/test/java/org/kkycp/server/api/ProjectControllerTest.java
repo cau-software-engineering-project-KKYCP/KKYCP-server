@@ -50,7 +50,7 @@ public class ProjectControllerTest {
                         .accept(MediaType.APPLICATION_JSON)
         ).andDo(document("project/create",
                         requestFields(
-                                fieldWithPath("project_name").description("추가할 프로젝트 이름")
+                                fieldWithPath("project_name").description("추가할 프로젝트 이름. 이미 있는 이름 사용시, 409 Conflict로 에러 json과 함께 응답.")
                         ),
                         responseFields(
                                 fieldWithPath("project_id").description("생성된 프로젝트의 ID")
