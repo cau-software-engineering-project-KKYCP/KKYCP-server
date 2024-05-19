@@ -15,11 +15,15 @@ import java.util.ArrayList;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(uniqueConstraints = {
+        @UniqueConstraint(columnNames = "project_name")
+})
 public class Project {
     @Id
     @GeneratedValue
     private Long id;
 
+    @Column(name = "project_name")
     private String projectName;
 
     @OneToMany(mappedBy = "participatedProject", cascade = CascadeType.ALL, orphanRemoval = true)

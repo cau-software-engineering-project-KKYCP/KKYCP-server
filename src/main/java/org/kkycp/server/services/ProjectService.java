@@ -5,6 +5,7 @@ import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.kkycp.server.domain.Project;
 import org.kkycp.server.repo.ProjectRepo;
+import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,11 +18,13 @@ public class ProjectService {
     private final ProjectRepo projectRepo;
 
     public long createProject(String projectName) {
-        if(projectRepo.existsByProjectName(projectName)) {
-            throw new DuplicatedProjectException("Project name " + projectName + " is duplicated.");
-        }
         Project project = new Project(projectName);
-        return projectRepo.save(project).getId();
+
+        try {
+            return projectRepo.save(project).getId();
+        } catch (DuplicateKeyException e) {
+            throw new DuplicatedProjectException(e);
+        }
     }
     
     public Optional<Project> findProject(long projectId) {
@@ -33,6 +36,10 @@ public class ProjectService {
     public static class DuplicatedProjectException extends RuntimeException {
         public DuplicatedProjectException(String message) {
             super(message);
+        }
+
+        public DuplicatedProjectException(Throwable cause) {
+            super(cause);
         }
     }
 }
