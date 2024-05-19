@@ -1,9 +1,10 @@
 package org.kkycp.server.repo;
 
 import org.kkycp.server.domain.Project;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.RepositoryDefinition;
 
-public interface ProjectRepo extends JpaRepository<Project, Long> {
+@RepositoryDefinition(domainClass = Project.class, idClass = Long.class)
+public interface ProjectRepo extends CrudRepository<Project, Long> {
     boolean existsByProjectName(String projectName);
-
 }
