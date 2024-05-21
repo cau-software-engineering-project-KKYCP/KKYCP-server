@@ -21,6 +21,7 @@ import java.util.ArrayList;
 public class Project {
     @Id
     @GeneratedValue
+    @Column(name = "project_id")
     private Long id;
 
     @Column(name = "project_name")
@@ -35,6 +36,7 @@ public class Project {
 
     public Issue reportIssue(Report report, LocalDate reportedDay){
         Issue newIssue = Issue.builder()
+                .project(this)
                 .title(report.getTitle())
                 .reporter(report.getReporter())
                 .description(report.getDescription())
