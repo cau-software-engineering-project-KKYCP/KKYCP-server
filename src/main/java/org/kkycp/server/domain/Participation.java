@@ -2,9 +2,11 @@ package org.kkycp.server.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 
 @Entity
 @Getter
+@Setter
 public class Participation {
     @Id
     @GeneratedValue
@@ -36,4 +38,6 @@ public class Participation {
         result = 31 * result + user.hashCode();
         return result;
     }
+
+
 }
