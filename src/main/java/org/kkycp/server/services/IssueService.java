@@ -16,11 +16,11 @@ import java.util.Optional;
 public class IssueService {
     private final ProjectService projectservice;
 
-    /*
-    Report report; // Issue의 attribution들을 담은 객체
-    long projectId; // Issue가 생성된 project의 주소
-    */
-
+    /**
+     * @param projectId Issue가 생성된 project의 주소
+     * @param report Issue의 attribution들을 담은 객체
+     * @param createdDated Issue 생성일
+     */
     public void createIssue(long projectId, Report report, LocalDate createdDated){
         Project project = projectservice.findProject(projectId).orElseThrow(() -> new NoSuchElementException("No such project exists."));
         project.reportIssue(report, createdDated);
