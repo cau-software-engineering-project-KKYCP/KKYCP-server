@@ -15,6 +15,7 @@ public class Issue {
     private User assignee;
     private Priority priority;
     private Status status;
+    private String type;
 
     protected Issue() {
     }
@@ -24,12 +25,14 @@ public class Issue {
                  @NonNull String title,
                  @NonNull String description,
                  @NonNull Issue.Priority priority,
-                 @NonNull LocalDate reportedDate) {
+                 @NonNull LocalDate reportedDate,
+                 @NonNull String type) {
         this.title = title;
         this.description = description;
         this.reporter = reporter;
         this.reportedDate = reportedDate;
         this.priority = priority;
+        this.type = type;
     }
 
     public enum Priority {
