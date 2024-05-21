@@ -1,15 +1,10 @@
 package org.kkycp.server.services;
 import lombok.RequiredArgsConstructor;
 import org.kkycp.server.domain.*;
-import org.kkycp.server.services.*;
-import org.kkycp.server.repo.*;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

@@ -2,7 +2,6 @@ package org.kkycp.server.repo.issue;
 
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.EntityManager;
 import lombok.NonNull;
 import org.kkycp.server.domain.Issue;
@@ -12,10 +11,10 @@ import java.util.List;
 import static org.kkycp.server.domain.QIssue.issue;
 import static org.springframework.util.StringUtils.hasText;
 
-public class IssueRepoImpl implements IssueSearchRepo {
+public class IssueSearchRepoImpl implements IssueSearchRepo {
     private final JPAQueryFactory queryFactory;
 
-    public IssueRepoImpl(EntityManager em) {
+    public IssueSearchRepoImpl(EntityManager em) {
         this.queryFactory = new JPAQueryFactory(em);
     }
 

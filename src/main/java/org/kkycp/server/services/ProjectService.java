@@ -1,5 +1,6 @@
 package org.kkycp.server.services;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
@@ -35,6 +36,14 @@ public class ProjectService {
     }
 
 
+    public void addUser(long projectId, String username) {
+        Project project = projectRepo.findById(projectId)
+                .orElseThrow(() -> new NoSuchElementException("No such project."));
+        User user = userRepo.findByUsername(username)
+                .orElseThrow(() -> new NoSuchElementException("No such user"));
+        user.participate(project);
+    }
+
     @ResponseStatus(HttpStatus.CONFLICT)
     public static class DuplicatedProjectException extends RuntimeException {
         public DuplicatedProjectException(String message) {
@@ -44,26 +53,6 @@ public class ProjectService {
         public DuplicatedProjectException(Throwable cause) {
             super(cause);
         }
-    }
-
-    public void addUser(long projectId, String username) {
-        Optional<Project> projectOptional = projectRepo.findById(projectId);
-        if (projectOptional.isPresent()) { // 해당 id 값을 지닌 프로젝트가 존재
-            Project mappingProject = projectOptional.get();
-
-            Optional<User> userOptional = userRepo.findByUsername(username);
-            if(userOptional.isPresent()) { // 해당 username을 지닌 User가 존재
-                User mappingUser = userOptional.get();
-
-                mappingUser.setParticipationsForUser(mappingUser, mappingProject); // Participation 설정
-            }
-            else{
-                throw new RuntimeException("유저를 찾을 수 없습니다."); // 유저가 존재하지 않으면 예외를 발생
-            }
-        } else {
-            throw new RuntimeException("프로젝트를 찾을 수 없습니다."); // 프로젝트가 존재하지 않으면 예외를 발생
-        }
-
     }
 }
 
