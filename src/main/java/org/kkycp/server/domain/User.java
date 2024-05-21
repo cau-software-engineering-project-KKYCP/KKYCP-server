@@ -19,6 +19,10 @@ public class User{
     @Embedded
     private ProjectRegistration projectRegistration;
 
+    public void participate(Project project) {
+        projectRegistration.register(this, project);
+    }
+
     @Override
     public final boolean equals(Object o) {
         if (this == o) {

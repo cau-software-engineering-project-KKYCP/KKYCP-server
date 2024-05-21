@@ -11,11 +11,16 @@ public class ProjectRegistration {
             cascade = CascadeType.ALL,
             orphanRemoval = true,
             fetch = FetchType.LAZY)
-    @MapKeyJoinColumn(referencedColumnName = "project_id", unique = true)
+    @MapKeyJoinColumn(referencedColumnName = "project_id")
     private Map<Project, Participation> participations = new HashMap<>();
 
     public boolean isRegistered(Project project) {
         return participations.containsKey(project);
+    }
+
+    public void register(User user, Project project) {
+        Participation newParticipation = new Participation(user, project);
+        participations.put(project, newParticipation);
     }
 
     //TODO: AUTHORIZATION CHECKING
