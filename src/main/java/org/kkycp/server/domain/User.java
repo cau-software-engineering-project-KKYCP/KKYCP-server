@@ -2,6 +2,7 @@ package org.kkycp.server.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NonNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -16,11 +17,8 @@ public class User{
 
     private String username;
 
-    @OneToMany(mappedBy = "user",
-            cascade = CascadeType.ALL,
-            orphanRemoval = true,
-            fetch = FetchType.LAZY)
-    private List<Participation> participations = new ArrayList<>();
+    @Embedded
+    private ProjectRegistration projectRegistration;
 
     @Override
     public final boolean equals(Object o) {
@@ -31,11 +29,11 @@ public class User{
             return false;
         }
 
-        return id.equals(user.id);
+        return username.equals(user.username);
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return username.hashCode();
     }
 }
