@@ -12,3 +12,15 @@ operation::auth/signup[snippets='http-request,form-parameters,http-response,curl
 == 테스트 페이지 접근
 
 operation::auth/login[snippets='http-request,request-headers,http-response,curl-request,httpie-request']
+
+== 어드민 작업
+
+=== 프로젝트 생성
+
+operation::admin/add-person-to-project[snippets='http-request,path-parameters,http-response,curl-request,httpie-request']
+
+== 이슈
+
+== 이슈 페이지 조회
+
+operation::issue/get-simple-issue-page[snippets='http-request,path-parameters,query-parameters,http-response,curl-request,httpie-request']
