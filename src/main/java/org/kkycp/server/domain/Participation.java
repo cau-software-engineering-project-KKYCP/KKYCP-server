@@ -1,12 +1,13 @@
 package org.kkycp.server.domain;
 
 import jakarta.persistence.*;
+import lombok.AccessLevel;
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
-@Setter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Participation {
     @Id
     @GeneratedValue
@@ -29,15 +30,13 @@ public class Participation {
             return false;
         }
 
-        return id.equals(that.id) && user.equals(that.user);
+        return participatedProject.equals(that.participatedProject) && user.equals(that.user);
     }
 
     @Override
     public int hashCode() {
-        int result = id.hashCode();
+        int result = participatedProject.hashCode();
         result = 31 * result + user.hashCode();
         return result;
     }
-
-
 }

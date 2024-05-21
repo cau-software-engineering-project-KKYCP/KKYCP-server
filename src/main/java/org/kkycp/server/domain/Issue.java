@@ -1,14 +1,13 @@
 package org.kkycp.server.domain;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NonNull;
+import lombok.*;
 
 import java.time.LocalDate;
 
 @Entity
 @Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Issue {
     @Id
     @GeneratedValue
@@ -44,9 +43,6 @@ public class Issue {
 
     private String type;
 
-    protected Issue() {
-    }
-
     @Builder
     public Issue(@NonNull User reporter,
                  @NonNull String title,
@@ -60,6 +56,7 @@ public class Issue {
         this.reportedDate = reportedDate;
         this.priority = priority;
         this.type = type;
+        this.status = Status.NEW;
     }
 
     public enum Priority {

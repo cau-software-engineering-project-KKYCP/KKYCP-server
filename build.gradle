@@ -53,7 +53,7 @@ dependencies {
 
 tasks.named('test') {
 	outputs.dir snippetsDir
-	useJUnitPlatform()
+	useJUnitPlatform()f
 }
 
 tasks.named('asciidoctor') {
