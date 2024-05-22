@@ -17,7 +17,7 @@ public class User{
     private String username;
 
     @Embedded
-    private ProjectRegistration projectRegistration;
+    private ProjectRegistration projectRegistration = new ProjectRegistration();
 
     public void participate(Project project) {
         projectRegistration.register(this, project);

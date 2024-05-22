@@ -62,4 +62,8 @@ public class Project {
     public int hashCode() {
         return projectName.hashCode();
     }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 }
