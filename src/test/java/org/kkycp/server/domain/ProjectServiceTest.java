@@ -1,11 +1,8 @@
-package org.kkycp.server.services;
+package org.kkycp.server.domain;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.kkycp.server.domain.Project;
-import org.kkycp.server.domain.User;
-
-import static org.junit.jupiter.api.Assertions.*;
+import org.kkycp.server.services.ProjectService;
 
 class ProjectServiceTest {
     private ProjectService service;
