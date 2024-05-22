@@ -1,11 +1,27 @@
 package org.kkycp.server.domain;
 
-import java.util.List;
+import jakarta.persistence.*;
+import lombok.AccessLevel;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
-public class User {
+@Entity
+@Table(name = "users")
+@Getter
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+public class User{
+    @Id
+    @GeneratedValue
     private Long id;
+
     private String username;
-    private List<Participation> participations;
+
+    @Embedded
+    private ProjectRegistration projectRegistration;
+
+    public void participate(Project project) {
+        projectRegistration.register(this, project);
+    }
 
     @Override
     public final boolean equals(Object o) {
@@ -16,11 +32,11 @@ public class User {
             return false;
         }
 
-        return id.equals(user.id);
+        return username.equals(user.username);
     }
 
     @Override
     public int hashCode() {
-        return id.hashCode();
+        return username.hashCode();
     }
 }
