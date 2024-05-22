@@ -4,10 +4,6 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.NonNull;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -22,6 +18,19 @@ public class User{
 
     @Embedded
     private ProjectRegistration projectRegistration;
+
+    public void participate(Project project) {
+        projectRegistration.register(this, project);
+    }
+
+    public boolean isParticipated(Project project) {
+        return projectRegistration.isRegistered(project);
+    }
+
+    public User(String username) {
+        this.username = username;
+        this.projectRegistration = new ProjectRegistration();
+    }
 
     @Override
     public final boolean equals(Object o) {

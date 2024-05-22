@@ -44,12 +44,15 @@ public class Issue {
     private String type;
 
     @Builder
-    public Issue(@NonNull User reporter,
-                 @NonNull String title,
-                 @NonNull String description,
-                 @NonNull Issue.Priority priority,
-                 @NonNull LocalDate reportedDate,
-                 @NonNull String type) {
+    public Issue(
+            @NonNull Project project,
+            @NonNull User reporter,
+            @NonNull String title,
+            @NonNull String description,
+            @NonNull Issue.Priority priority,
+            @NonNull LocalDate reportedDate,
+            @NonNull String type) {
+        this.project = project;
         this.title = title;
         this.description = description;
         this.reporter = reporter;

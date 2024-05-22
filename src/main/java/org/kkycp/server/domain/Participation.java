@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(uniqueConstraints = @UniqueConstraint(columnNames = {"project_id", "user_id"}))
 public class Participation {
     @Id
     @GeneratedValue
@@ -20,6 +21,11 @@ public class Participation {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "user_id")
     private User user;
+
+    public Participation(User user, Project participatedProject) {
+        this.participatedProject = participatedProject;
+        this.user = user;
+    }
 
     @Override
     public final boolean equals(Object o) {
