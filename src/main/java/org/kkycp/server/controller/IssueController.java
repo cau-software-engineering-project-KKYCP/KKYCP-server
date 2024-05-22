@@ -14,10 +14,21 @@ public class IssueController {
     private final IssueService issueService;
 
     @GetMapping("/project/{projectId}/issues")
-        List<SimpleIssueDto> getSimplifiedIssues(@PathVariable("projectId") String projectId,
+    List<SimpleIssueDto> getSimplifiedIssues(@PathVariable("projectId") String projectId,
                                                  @RequestParam(defaultValue = "0") int offset,
                                                  @RequestParam(defaultValue = "50") int limit,
                                                  @ModelAttribute SearchConditionDto searchCondition) {
         return issueService.getSimplifiedIssues(offset, limit, searchCondition);
+    }
+
+    @GetMapping("/project/{projectId}/statistics")
+    public void getStatistics(@PathVariable("projectId") String projectId) {
+        //TODO
+    }
+
+    @PatchMapping("/project/{projectId}/issues/{issueId}")
+    public void updateIssue(@PathVariable("projectId") String projectId,
+                            @PathVariable("issueId") String issueId) {
+        //TODO
     }
 }
