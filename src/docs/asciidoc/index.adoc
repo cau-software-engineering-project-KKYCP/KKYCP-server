@@ -9,9 +9,13 @@
 
 operation::auth/signup[snippets='http-request,form-parameters,http-response,curl-request,httpie-request']
 
-== 테스트 페이지 접근
+== 로그인
 
-operation::auth/login[snippets='http-request,request-headers,http-response,curl-request,httpie-request']
+operation::auth/login[snippets='http-request,form-parameters']
+
+로그인에 실패했을 경우, 401 Unauthorized로 응답한다.
+
+operation::auth/login[snippets='http-response,curl-request,httpie-request']
 
 == 프로젝트
 

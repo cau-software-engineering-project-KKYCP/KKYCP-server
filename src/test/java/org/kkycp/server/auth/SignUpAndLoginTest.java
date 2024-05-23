@@ -1,34 +1,45 @@
 package org.kkycp.server.auth;
 
 
+import jakarta.servlet.http.Cookie;
 import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.kkycp.server.RestDocsTestTemplate;
-import org.springframework.http.HttpHeaders;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.springframework.restdocs.headers.HeaderDocumentation.headerWithName;
-import static org.springframework.restdocs.headers.HeaderDocumentation.requestHeaders;
+import static org.springframework.restdocs.cookies.CookieDocumentation.cookieWithName;
+import static org.springframework.restdocs.cookies.CookieDocumentation.responseCookies;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.get;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.request.RequestDocumentation.formParameters;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+@SpringBootTest
+@AutoConfigureRestDocs
+@AutoConfigureMockMvc(printOnlyOnFailure = false)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class SignUpAndLoginTest extends RestDocsTestTemplate {
+public class SignUpAndLoginTest {
     private static final String TEST_USERNAME = "test1";
     private static final String TEST_PASSWORD = "password";
+
+    @Autowired
+    private MockMvc mockMvc;
 
     @Test
     @Order(1)
     @Transactional
     public void signUp() throws Exception {
         mockMvc.perform(post("/signup")
+                        .contentType(MediaType.APPLICATION_FORM_URLENCODED)
                         .param("username", TEST_USERNAME)
                         .param("password", TEST_PASSWORD))
                 .andExpect(status().isCreated())
@@ -41,12 +52,30 @@ public class SignUpAndLoginTest extends RestDocsTestTemplate {
 
     @Test
     @Order(2)
-    public void test() throws Exception {
-        mockMvc.perform(get("/test").with(httpBasic(TEST_USERNAME, TEST_PASSWORD)))
+    public void login() throws Exception {
+        String sessionCookieName = "JSESSIONID";
+        Cookie sessionCookie = new Cookie(sessionCookieName,
+                "vYj_N9coYQuu9QP-Hftf9hHgYNj9C4r6mHVqZ3fc.mptwas2");
+
+        mockMvc.perform(formLogin("/login").user(TEST_USERNAME).password(TEST_PASSWORD))
+                .andDo(result -> result.getResponse().addCookie(sessionCookie))
                 .andExpect(status().isOk())
-                .andDo(document("auth/login", requestHeaders(
-                        headerWithName(HttpHeaders.AUTHORIZATION)
-                                .description("HTTP Basci Authentication 헤더. https://en.wikipedia.org/wiki/Basic_access_authentication#Client_side 참고")
-                )));
+                .andDo(document("auth/login",
+                        responseCookies(
+                                cookieWithName(sessionCookieName).description("쿠키 이름")
+                        ),
+                        formParameters(
+                                parameterWithName("username").description("유저 이름 (아이디)."),
+                                parameterWithName("password").description("비밀번호"),
+                                parameterWithName("_csrf").ignored()
+                        )
+                ));
+    }
+
+    @Test
+    @Order(3)
+    public void login_fail() throws Exception {
+        mockMvc.perform(formLogin("/login").user(TEST_USERNAME).password("wrong password"))
+                .andExpect(status().isUnauthorized());
     }
 }
