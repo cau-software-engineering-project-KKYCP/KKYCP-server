@@ -4,6 +4,9 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.kkycp.server.domain.authorization.Privilege;
+
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -19,6 +22,11 @@ public class User{
     @Embedded
     private ProjectRegistration projectRegistration;
 
+    public User(String username) {
+        this.username = username;
+        this.projectRegistration = new ProjectRegistration();
+    }
+
     public void participate(Project project) {
         projectRegistration.register(this, project);
     }
@@ -27,9 +35,16 @@ public class User{
         return projectRegistration.isRegistered(project);
     }
 
-    public User(String username) {
-        this.username = username;
-        this.projectRegistration = new ProjectRegistration();
+    public void addPrivilege(Project grantedProject, Privilege privilege) {
+        projectRegistration.addPrivilege(grantedProject, privilege);
+    }
+
+    public boolean hasPrivilege(Project project, Privilege privilege) {
+        return projectRegistration.hasPrivilege(project, privilege);
+    }
+
+    public List<Privilege> getPrivileges(Project project) {
+        return projectRegistration.getPrivilege(project);
     }
 
     @Override

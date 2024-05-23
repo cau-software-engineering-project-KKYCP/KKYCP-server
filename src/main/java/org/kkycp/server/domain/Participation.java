@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.kkycp.server.domain.authorization.Privilege;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -22,9 +26,23 @@ public class Participation {
     @JoinColumn(name = "user_id")
     private User user;
 
+    @ElementCollection(targetClass = Privilege.class)
+    @JoinTable(name = "privilege", joinColumns = @JoinColumn(name = "participation_id"))
+    @Column(name = "grant", nullable = false)
+    @Enumerated(EnumType.STRING)
+    List<Privilege> privileges = new ArrayList<>();
+
     public Participation(User user, Project participatedProject) {
         this.participatedProject = participatedProject;
         this.user = user;
+    }
+
+    void addPrivilege(Privilege privilege) {
+        privileges.add(privilege);
+    }
+
+    boolean hasPrivilege(Privilege privilege) {
+        return privileges.contains(privilege);
     }
 
     @Override
