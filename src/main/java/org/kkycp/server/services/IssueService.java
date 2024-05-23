@@ -1,6 +1,7 @@
 package org.kkycp.server.services;
 import lombok.RequiredArgsConstructor;
 import org.kkycp.server.domain.*;
+import org.kkycp.server.repo.issue.IssueRepo;
 import org.kkycp.server.services.*;
 import org.kkycp.server.repo.*;
 import org.springframework.stereotype.Service;
@@ -21,9 +22,17 @@ public class IssueService {
     long projectId; // Issue가 생성된 project의 주소
     */
 
-    public void createIssue(long projectId, Report report, LocalDate createdDated){
+    public void createIssue(long projectId, Report report, LocalDate createdDated) {
         Project project = projectservice.findProject(projectId).orElseThrow(() -> new NoSuchElementException("No such project exists."));
         project.reportIssue(report, createdDated);
     }
-}
 
+    public static Issue findIssue(long issueid){
+        return IssueRepo.findbyId(issueid);
+    }
+
+    public Issue getDescription(long projectid, long issueid){
+        Project project =projectservice.findProject(projectid);
+        return project.getIssues(issueid);
+    }
+}
