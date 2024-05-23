@@ -19,7 +19,8 @@ public class IssueSearchRepoImpl implements IssueSearchRepo {
     }
 
     @Override
-    public List<Issue> search(@NonNull Long projectId, IssueSearchCondition searchCondition) {
+    public List<Issue> search(@NonNull Long projectId, IssueSearchCondition searchCondition,
+                              int offset, int limit) {
         return queryFactory.selectFrom(issue)
                 .where(projectIdEq(projectId),
                         titleLike(searchCondition.getTitle()),
@@ -29,6 +30,8 @@ public class IssueSearchRepoImpl implements IssueSearchRepo {
                         statusEq(searchCondition.getStatus()),
                         typeEq(searchCondition.getType()))
                 .orderBy(issue.reportedDate.desc())
+                .offset(offset)
+                .limit(limit)
                 .fetch();
     }
 
