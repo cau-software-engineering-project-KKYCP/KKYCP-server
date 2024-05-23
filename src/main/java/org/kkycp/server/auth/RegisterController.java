@@ -1,6 +1,7 @@
 package org.kkycp.server.auth;
 
 import lombok.RequiredArgsConstructor;
+import org.kkycp.server.repo.UserRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,20 +14,12 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 public class RegisterController {
-    private final UserDetailsManager userDetailsManager;
-    private final PasswordEncoder passwordEncoder;
+    private final UserRegisterService userRegisterService;
 
     @PostMapping("/signup")
     @ResponseStatus(HttpStatus.CREATED)
     public void signUp(@ModelAttribute RegisterDto.Request request) {
-        if (userDetailsManager.userExists(request.getUsername())) {
-            throw new InvalidRegistrationException("This username is already in use.");
-        }
-
-        UserDetails newUserDetails = User.withUsername(request.getUsername())
-                .password(passwordEncoder.encode(request.getPassword()))
-                .build();
-        userDetailsManager.createUser(newUserDetails);
+        userRegisterService.signUp(request);
     }
 
     @ExceptionHandler(InvalidRegistrationException.class)
