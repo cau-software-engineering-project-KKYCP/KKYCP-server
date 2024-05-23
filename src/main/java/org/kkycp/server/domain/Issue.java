@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -43,6 +45,9 @@ public class Issue {
 
     private String type;
 
+    @OneToMany(mappedBy = "commenter", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Comment> comments = new ArrayList<>();
+
     @Builder
     public Issue(
             @NonNull Project project,
@@ -60,6 +65,11 @@ public class Issue {
         this.priority = priority;
         this.type = type;
         this.status = Status.NEW;
+    }
+
+    public void addComment(Comment comment) {
+        comment.setParentIssue(this);
+        comments.add(comment);
     }
 
     public enum Priority {
