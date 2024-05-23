@@ -62,6 +62,26 @@ public class Issue {
         this.status = Status.NEW;
     }
 
+    //user를 fixer로 설정
+    public void setFixer(User user){
+        this.fixer=user;
+    }
+
+    // Assignee가 이슈를 해결했을 때 상태 변경
+    public void resolveIssue() {
+        this.status = Status.RESOLVED;
+    }
+
+    // Verifier가 이슈를 최종 확인하고 종료할 때 상태 변경
+    public void closeIssue() {
+        this.status = Status.CLOSED;
+    }
+
+    //status를 업데이트
+    public void setStatus(Status status){
+        this.status=status;
+    }
+    
     public enum Priority {
         BLOCKER,
         CRITICAL,
