@@ -29,4 +29,6 @@ public interface IssueRepo extends JpaRepository<Issue, Long>, IssueSearchRepo{
     List<Issue> findAllByPriority(Issue.Priority priority);
 
     List<Issue> findAllByType(String string);
+
+    Issue findById(long issueid);
 }
