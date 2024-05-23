@@ -1,10 +1,14 @@
 package org.kkycp.server.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
+import org.kkycp.server.domain.Issue;
 import org.kkycp.server.domain.Project;
 import org.kkycp.server.repo.ProjectRepo;
+import org.kkycp.server.repo.issue.IssueRepo;
+import org.kkycp.server.repo.issue.IssueSearchCondition;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -16,6 +20,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 @RequiredArgsConstructor
 public class ProjectService {
     private final ProjectRepo projectRepo;
+
+    private final IssueRepo issueRepo;
 
     public long createProject(String projectName) {
         Project project = new Project(projectName);
@@ -41,6 +47,11 @@ public class ProjectService {
         public DuplicatedProjectException(Throwable cause) {
             super(cause);
         }
+    }
+
+    public List<Issue> findIssues(long projectId, IssueSearchCondition condition, int page, int quantity){
+        int offset = (page - 1) * quantity;
+        return issueRepo.search(projectId, condition, offset, quantity);
     }
 }
 
