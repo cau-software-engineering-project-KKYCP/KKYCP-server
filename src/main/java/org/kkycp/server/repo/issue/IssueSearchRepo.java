@@ -11,6 +11,8 @@ public interface IssueSearchRepo {
      * @param searchCondition for null fields, all subject is found
      * @return list of found object. Empty if there's no issue meeting the condition
      */
-    List<Issue> search(@NonNull Long projectId, IssueSearchCondition searchCondition, int offset,
+    List<Issue> search(@NonNull Long projectId,
+                       @NonNull IssueSearchCondition searchCondition,
+                       int offset,
                        int limit);
 }

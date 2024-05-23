@@ -19,8 +19,10 @@ public class IssueSearchRepoImpl implements IssueSearchRepo {
     }
 
     @Override
-    public List<Issue> search(@NonNull Long projectId, IssueSearchCondition searchCondition,
-                              int offset, int limit) {
+    public List<Issue> search(@NonNull Long projectId,
+                              @NonNull IssueSearchCondition searchCondition,
+                              int offset,
+                              int limit) {
         return queryFactory.selectFrom(issue)
                 .where(projectIdEq(projectId),
                         titleLike(searchCondition.getTitle()),
