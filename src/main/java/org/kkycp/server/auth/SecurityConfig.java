@@ -23,8 +23,7 @@ public class SecurityConfig {
                 .cors(AbstractHttpConfigurer::disable)
                 .httpBasic(withDefaults())
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/").permitAll()
-                                .requestMatchers("/signup").anonymous()
+                        request.requestMatchers("/", "/signup", "/login").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .build();
