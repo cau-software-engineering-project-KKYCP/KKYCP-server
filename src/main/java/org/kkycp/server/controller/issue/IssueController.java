@@ -1,14 +1,13 @@
-package org.kkycp.server.controller;
+package org.kkycp.server.controller.issue;
 
 import lombok.RequiredArgsConstructor;
-import org.kkycp.server.controller.dto.IssueDto;
-import org.kkycp.server.controller.dto.SearchConditionDto;
-import org.kkycp.server.controller.dto.SimpleIssueDto;
+import org.kkycp.server.domain.TimeUnit;
 import org.kkycp.server.services.IssueService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,6 +19,7 @@ public class IssueController {
                                              @RequestParam(defaultValue = "0") int offset,
                                              @RequestParam(defaultValue = "50") int limit,
                                              @ModelAttribute SearchConditionDto searchCondition) {
+
         return issueService.getSimplifiedIssues(offset, limit, searchCondition);
     }
 
@@ -44,7 +44,9 @@ public class IssueController {
     }
 
     @GetMapping("/project/{projectId}/statistics")
-    public void getStatistics(@PathVariable("projectId") String projectId) {
+    public List<Map<String, Object>> getStatistics(@PathVariable("projectId") String projectId,
+                                             @RequestParam(name = "time_unit", defaultValue = "DAY")
+                                             TimeUnit timeUnit) {
         //TODO
     }
 }

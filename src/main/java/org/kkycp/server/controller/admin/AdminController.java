@@ -1,15 +1,11 @@
-package org.kkycp.server.controller;
+package org.kkycp.server.controller.admin;
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.kkycp.server.controller.dto.ProjectCreateDto;
-import org.kkycp.server.controller.dto.UserPrivilegeDto;
 import org.kkycp.server.domain.authorization.Privilege;
 import org.kkycp.server.services.ProjectService;
 import org.kkycp.server.services.UserService;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,10 +25,10 @@ public class AdminController {
         return new ProjectCreateDto.Response(createdProjectId);
     }
 
-    @PostMapping("/{project-id}/{username}")
+    @PostMapping("/{project-id}/users")
     public void registerUser(@PathVariable("project-id") long projectId,
-                             @PathVariable("username") String username) {
-        userService.registerUserTo(projectId, username);
+                             @RequestBody UserRegisterDto.Request registerDto) {
+        userService.registerUserTo(projectId, registerDto.getUsername());
     }
 
     @GetMapping("/{project-id}/privileges")

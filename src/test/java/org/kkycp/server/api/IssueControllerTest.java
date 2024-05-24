@@ -2,9 +2,9 @@ package org.kkycp.server.api;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
-import org.kkycp.server.controller.IssueController;
-import org.kkycp.server.controller.dto.SearchConditionDto;
-import org.kkycp.server.controller.dto.SimpleIssueDto;
+import org.kkycp.server.controller.issue.IssueController;
+import org.kkycp.server.controller.issue.SearchConditionDto;
+import org.kkycp.server.controller.issue.SimpleIssueDto;
 import org.kkycp.server.domain.Issue;
 import org.kkycp.server.services.IssueService;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,4 +1,4 @@
-package org.kkycp.server.controller.dto;
+package org.kkycp.server.controller.issue;
 
 import lombok.Data;
 import org.kkycp.server.domain.Issue;

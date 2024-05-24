@@ -1,4 +1,4 @@
-package org.kkycp.server.controller.dto;
+package org.kkycp.server.controller.comment;
 
 import lombok.Data;
 

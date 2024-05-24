@@ -1,7 +1,6 @@
-package org.kkycp.server.controller.dto;
+package org.kkycp.server.controller.admin;
 
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.kkycp.server.domain.authorization.Privilege;
 

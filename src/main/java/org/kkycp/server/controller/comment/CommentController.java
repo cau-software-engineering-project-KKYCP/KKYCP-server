@@ -1,6 +1,5 @@
-package org.kkycp.server.controller;
+package org.kkycp.server.controller.comment;
 
-import org.kkycp.server.controller.dto.CommentDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
