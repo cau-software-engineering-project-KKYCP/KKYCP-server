@@ -21,28 +21,35 @@ public class SecurityConfig {
     @Bean
     @Profile("prod")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .formLogin(form -> form
-                        .successHandler(new NullAuthenticationSuccessHandler())
+        applySecurityConfiguration(http);
+        http.exceptionHandling(exception -> exception.authenticationEntryPoint(
+                (request, response, authException) -> {}
+        ));
+        return http.build();
+    }
+
+    public static void applySecurityConfiguration(HttpSecurity http) throws Exception {
+        http.formLogin(form -> form.successHandler(new NullAuthenticationSuccessHandler())
                         .failureHandler(new SimpleUrlAuthenticationFailureHandler()))
                 .csrf(AbstractHttpConfigurer::disable)
                 .cors(cors -> cors.configurationSource(corsSource()))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-                .exceptionHandling(exception -> exception.authenticationEntryPoint((request, response, authException) -> {}))
-                .authorizeHttpRequests(request ->
-                        request.requestMatchers("/", "/index.html", "/signup", "/login").permitAll()
-                                .anyRequest().authenticated()
-                )
-                .build();
+                .sessionManagement(
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+
+                .authorizeHttpRequests(
+                        request -> request.requestMatchers("/", "/index.html", "/signup", "/login")
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated());
     }
 
-    @Bean
-    public CorsConfigurationSource corsSource() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+    public static CorsConfigurationSource corsSource() {
         CorsConfiguration config = new CorsConfiguration();
         config.addAllowedOrigin("*");
         config.addAllowedHeader("*");
         config.addAllowedMethod("*");
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return source;
     }

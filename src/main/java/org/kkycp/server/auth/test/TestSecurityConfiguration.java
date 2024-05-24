@@ -2,6 +2,7 @@ package org.kkycp.server.auth.test;
 
 import lombok.RequiredArgsConstructor;
 import org.kkycp.server.auth.NullAuthenticationSuccessHandler;
+import org.kkycp.server.auth.SecurityConfig;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -19,19 +20,8 @@ import org.springframework.web.cors.CorsConfigurationSource;
 public class TestSecurityConfiguration {
     @Bean
     @Profile("!prod")
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, CorsConfigurationSource corsSource) throws Exception {
-        return http
-                .formLogin(form -> form
-                        .successHandler(new NullAuthenticationSuccessHandler())
-                        .failureHandler(new SimpleUrlAuthenticationFailureHandler()))
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsSource))
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-                //.exceptionHandling(exception -> exception.authenticationEntryPoint((request, response, authException) -> {}))
-                .authorizeHttpRequests(request ->
-                        request.requestMatchers("/", "/index.html", "/signup", "/login").permitAll()
-                                .anyRequest().authenticated()
-                )
-                .build();
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+        SecurityConfig.applySecurityConfiguration(http);
+        return http.build();
     }
 }
