@@ -68,8 +68,8 @@ public class Issue {
     }
 
     // Assignee가 이슈를 해결했을 때 상태 변경
-    public void resolveIssue() {
-        this.status = Status.RESOLVED;
+    public void issueFixed() {
+        this.status = Status.FIXED;
     }
 
     // Verifier가 이슈를 최종 확인하고 종료할 때 상태 변경

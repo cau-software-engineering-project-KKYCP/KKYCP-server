@@ -32,13 +32,13 @@ public class IssueController {
         return new ResponseEntity<>(issue, HttpStatus.CREATED);
     }
 
-    @PostMapping    //issue를 resolve로 변경
+    @PostMapping    //issue를 fixed로 변경
     public ResponseEntity<String> resolveIssue(Long issueId) {
         Issue issue = issueRepo.findById(issueId)   //issueId로 issue 찾음
                 .orElseThrow(() -> new IllegalArgumentException("Invalid issue ID"));//예외
 
         // 이슈를 해결했다고 시스템에 알림
-        issue.resolveIssue();
+        issue.issueFixed();
         issue.setFixer(issue.getAssignee());
         return new ResponseEntity<>("Issue resolved.", HttpStatus.OK);
     }
