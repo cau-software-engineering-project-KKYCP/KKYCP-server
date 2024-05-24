@@ -15,12 +15,12 @@ public class IssueController {
     private final IssueService issueService;
 
     @GetMapping("/project/{projectId}/issues")
-    List<SimpleIssueDto> getSimplifiedIssues(@PathVariable("projectId") String projectId,
+    List<SimpleIssueDto> getSimplifiedIssues(@PathVariable("projectId") long projectId,
                                              @RequestParam(defaultValue = "0") int offset,
                                              @RequestParam(defaultValue = "50") int limit,
                                              @ModelAttribute SearchConditionDto searchCondition) {
 
-        return issueService.getSimplifiedIssues(offset, limit, searchCondition);
+        return issueService.getSimplifiedIssues(projectId, searchCondition.convert(), offset, limit);
     }
 
     @PostMapping("/project/{projectId}/issues")
@@ -48,5 +48,6 @@ public class IssueController {
                                              @RequestParam(name = "time_unit", defaultValue = "DAY")
                                              TimeUnit timeUnit) {
         //TODO
+        return null;
     }
 }

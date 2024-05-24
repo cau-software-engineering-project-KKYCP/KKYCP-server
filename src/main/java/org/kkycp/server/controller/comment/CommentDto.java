@@ -4,8 +4,8 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
-@Data
 public class CommentDto {
+    @Data
     public static class Request {
         private LocalDate createdDate;
         private String comment;

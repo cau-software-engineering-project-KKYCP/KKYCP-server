@@ -10,13 +10,8 @@ import java.util.List;
 @RestController
 public class UserController {
     @GetMapping("/project/{projectId}/users")
-    public List<UserDto.Response> getUsersOfProject(@PathVariable String projectId) {
+    public List<UserDto.Response> getUsersOfProject(@PathVariable String projectId, @RequestParam String username) {
         //TODO
-    }
-
-    @GetMapping("/project/{projectId}/users")
-    public UserDto.Response getUser(@PathVariable String projectId,
-                                    @RequestParam String username) {
-        //TODO
+        return null;
     }
 }

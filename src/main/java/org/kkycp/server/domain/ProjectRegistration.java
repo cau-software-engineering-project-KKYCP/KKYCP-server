@@ -36,9 +36,18 @@ public class ProjectRegistration {
         return participation.hasPrivilege(privilege);
     }
 
-    public List<Privilege> getPrivilege(Project project) {
+    public void replacePrivileges(Project project, Collection<Privilege> privileges) {
+        Participation participation = this.participations.get(project);
+        if (participation == null) {
+            throw new UserNotParticipatingException();
+        }
+
+        participation.replacePrivileges(privileges);
+    }
+
+    public Set<Privilege> getPrivilege(Project project) {
         Participation participation = getParticipation(project);
-        return Collections.unmodifiableList(participation.privileges);
+        return Collections.unmodifiableSet(participation.privileges);
     }
 
     private Participation getParticipation(Project grantedProject) {

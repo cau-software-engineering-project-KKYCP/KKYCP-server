@@ -3,9 +3,9 @@ package org.kkycp.server.api;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.kkycp.server.controller.issue.IssueController;
-import org.kkycp.server.controller.issue.SearchConditionDto;
 import org.kkycp.server.controller.issue.SimpleIssueDto;
 import org.kkycp.server.domain.Issue;
+import org.kkycp.server.repo.issue.IssueSearchCondition;
 import org.kkycp.server.services.IssueService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration;
@@ -41,7 +41,7 @@ public class IssueControllerTest {
     void getSimpleIssuePage() throws Exception {
         List<SimpleIssueDto> response = generateFakeResponse();
 
-        when(issueService.getSimplifiedIssues(anyInt(), anyInt(), any(SearchConditionDto.class)))
+        when(issueService.getSimplifiedIssues(anyInt(), any(IssueSearchCondition.class),  anyInt(),  anyInt()))
                 .thenReturn(response);
 
         mockMvc.perform(get("/project/{projectId}/issues", 13L)

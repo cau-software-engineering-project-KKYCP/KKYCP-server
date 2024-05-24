@@ -23,8 +23,8 @@ public class JpaMapKeyTest {
         User user1 = new User("user1");
         Project project1 = new Project("project1");
         Project project2 = new Project("project2");
-        user1.participate(project1);
-        user1.participate(project2);
+        user1.register(project1);
+        user1.register(project2);
 
         em.persist(project1);
         em.persist(project2);

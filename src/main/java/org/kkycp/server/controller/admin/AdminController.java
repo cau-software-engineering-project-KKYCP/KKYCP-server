@@ -3,6 +3,8 @@ package org.kkycp.server.controller.admin;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.kkycp.server.domain.authorization.Privilege;
+import org.kkycp.server.repo.UserPrivilegeRecord;
+import org.kkycp.server.services.PrivilegeService;
 import org.kkycp.server.services.ProjectService;
 import org.kkycp.server.services.UserService;
 import org.springframework.http.HttpStatus;
@@ -16,6 +18,7 @@ import java.util.List;
 public class AdminController {
     private final ProjectService projectService;
     private final UserService userService;
+    private final PrivilegeService privilegeService;
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
@@ -32,18 +35,17 @@ public class AdminController {
     }
 
     @GetMapping("/{project-id}/privileges")
-    public List<UserPrivilegeDto.Response> getPrivileges(@PathVariable("project-id") long projectId,
-                                                         @RequestParam(defaultValue = "0") int page,
-                                                         @RequestParam(defaultValue = "50") int size) {
-        //TODO
-        return null;
+    public List<UserPrivilegeDto.Response> getPrivileges(@PathVariable("project-id") long projectId) {
+        List<UserPrivilegeRecord> userPrivileges = privilegeService.getAllUserPrivileges(projectId);
+        return userPrivileges.stream()
+                .map(p -> new UserPrivilegeDto.Response(p.getUser().getUsername(), p.getPrivileges()))
+                .toList();
     }
 
-    @PutMapping("/{project-id}/privileges/{username}")
-    @ResponseStatus(HttpStatus.CREATED)
+    @PutMapping("/{project-id}/privileges")
     public void grantUser(@PathVariable("project-id") long projectId,
-                          @PathVariable("username") String username,
+                          @RequestParam("username") String username,
                           @RequestBody List<Privilege> privileges) {
-        //TODO
+        userService.replaceUserPrivileges(username, projectId, privileges);
     }
 }

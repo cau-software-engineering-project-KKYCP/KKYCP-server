@@ -6,6 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.kkycp.server.domain.authorization.Privilege;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 @Entity
@@ -27,7 +30,7 @@ public class User{
         this.projectRegistration = new ProjectRegistration();
     }
 
-    public void participate(Project project) {
+    public void register(Project project) {
         projectRegistration.register(this, project);
     }
 
@@ -39,12 +42,16 @@ public class User{
         projectRegistration.addPrivilege(grantedProject, privilege);
     }
 
+    public void replacePrivileges(Project grantedProject, Collection<Privilege> privileges) {
+        projectRegistration.replacePrivileges(grantedProject, privileges);
+    }
+
     public boolean hasPrivilege(Project project, Privilege privilege) {
         return projectRegistration.hasPrivilege(project, privilege);
     }
 
     public List<Privilege> getPrivileges(Project project) {
-        return projectRegistration.getPrivilege(project);
+        return new ArrayList<>(projectRegistration.getPrivilege(project));
     }
 
     @Override

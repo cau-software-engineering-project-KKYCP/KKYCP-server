@@ -2,6 +2,7 @@ package org.kkycp.server.controller.issue;
 
 import lombok.Getter;
 import org.kkycp.server.domain.Issue;
+import org.kkycp.server.repo.issue.IssueSearchCondition;
 import org.springframework.web.bind.annotation.BindParam;
 
 @Getter
@@ -25,5 +26,9 @@ public class SearchConditionDto {
         this.status = status;
         this.title = title;
         this.type = type;
+    }
+
+    public IssueSearchCondition convert() {
+        return new IssueSearchCondition(title, assigneeName, reporterName, priority, status,type);
     }
 }

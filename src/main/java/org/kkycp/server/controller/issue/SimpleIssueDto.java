@@ -18,4 +18,5 @@ public class SimpleIssueDto {
     private LocalDate reportedDate;
     private Issue.Priority priority;
     private Issue.Status status;
+    private String type;
 }

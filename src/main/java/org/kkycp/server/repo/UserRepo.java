@@ -25,4 +25,7 @@ public interface UserRepo extends CrudRepository<User, Long> {
 
     @Query("select u from User u join fetch u.projectRegistration.participations where u.username = :username")
     Optional<User> findByUsernameFetchParticipation(@Param("username") String username);
+
+    @Query("select new org.kkycp.server.repo.UserPrivilegeRecord(p.user, p.privileges) from Participation p where p.participatedProject.id = :projectId")
+    List<UserPrivilegeRecord> getAllUserPrivileges(@Param("projectId") Long projectId);
 }

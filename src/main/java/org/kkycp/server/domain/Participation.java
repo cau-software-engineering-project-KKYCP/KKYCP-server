@@ -6,8 +6,9 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.kkycp.server.domain.authorization.Privilege;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter
@@ -30,7 +31,7 @@ public class Participation {
     @JoinTable(name = "privilege", joinColumns = @JoinColumn(name = "participation_id"))
     @Column(name = "grant", nullable = false)
     @Enumerated(EnumType.STRING)
-    List<Privilege> privileges = new ArrayList<>();
+    Set<Privilege> privileges = new HashSet<>();
 
     public Participation(User user, Project participatedProject) {
         this.participatedProject = participatedProject;
@@ -39,6 +40,10 @@ public class Participation {
 
     void addPrivilege(Privilege privilege) {
         privileges.add(privilege);
+    }
+
+    public void replacePrivileges(Collection<Privilege> newPrivileges) {
+        privileges = new HashSet<>(newPrivileges);
     }
 
     boolean hasPrivilege(Privilege privilege) {

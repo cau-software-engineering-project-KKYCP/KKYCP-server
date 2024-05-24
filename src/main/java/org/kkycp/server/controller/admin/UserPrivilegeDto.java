@@ -4,7 +4,12 @@ package org.kkycp.server.controller.admin;
 import lombok.Data;
 import org.kkycp.server.domain.authorization.Privilege;
 
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Set;
+
+import static java.util.Comparator.naturalOrder;
 
 public class UserPrivilegeDto {
 
@@ -26,9 +31,9 @@ public class UserPrivilegeDto {
         String username;
         List<Privilege> privileges;
 
-        public Response(String username, List<Privilege> privileges) {
+        public Response(String username, Collection<Privilege> privileges) {
             this.username = username;
-            this.privileges = privileges;
+            privileges = privileges.stream().sorted(naturalOrder()).toList();
         }
     }
 }
