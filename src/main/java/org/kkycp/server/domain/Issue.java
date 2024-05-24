@@ -17,6 +17,7 @@ public class Issue {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
+    @Getter(AccessLevel.NONE)
     private Project project;
 
     private String title;
@@ -83,6 +84,7 @@ public class Issue {
     public enum Status {
         NEW,
         ASSIGNED,
+        FIXED,
         RESOLVED,
         CLOSED,
         REOPENED

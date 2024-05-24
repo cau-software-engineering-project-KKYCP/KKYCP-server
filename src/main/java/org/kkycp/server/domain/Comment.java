@@ -2,6 +2,7 @@ package org.kkycp.server.domain;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
@@ -16,6 +17,7 @@ public class Comment {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "parent_issue_id")
+    @Getter(AccessLevel.NONE)
     @Setter
     private Issue parentIssue;
 
