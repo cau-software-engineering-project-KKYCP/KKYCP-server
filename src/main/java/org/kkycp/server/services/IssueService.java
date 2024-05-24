@@ -40,5 +40,33 @@ public class IssueService {
         else    
             return;
     }
+
+    //issue가 해결되었는지 검토
+    public void verifyIssueResolved(Long issueId, Long testerId, boolean resolved) {
+        try {
+            // Get the issue
+            Issue issue = issueRepo.findById(issueId)
+                                    .orElseThrow(() -> new IllegalArgumentException("Invalid issue ID"));
+            // tester가 reporter인지 확인
+            if (!issue.getReporter().getId().equals(testerId)) {
+                return;
+            }
+            //status가 FIXED인지 확인
+            if (issue.getStatus() != Issue.Status.FIXED) {
+                return;
+            }
+            // issue가 해결된 상태
+            if (resolved) {
+                updateIssueStatus(issueId, testerId, Issue.Status.RESOLVED);//resolved로 변경
+                return;
+            } else {//issue가 해결되지 않음
+                //코멘트 추가
+                updateIssueStatus(issueId, testerId, Issue.Status.ASSIGNED);//assigned로 변경
+                return;
+            }
+        } catch (IllegalArgumentException e) {
+            return;
+        }
+    }
 }
 

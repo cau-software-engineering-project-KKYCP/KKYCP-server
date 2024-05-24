@@ -32,34 +32,6 @@ public class IssueController {
         return new ResponseEntity<>(issue, HttpStatus.CREATED);
     }
 
-    /*@PostMapping// Tester가 해결 여부 확인
-    public ResponseEntity<String> verifyIssueResolution(Long issueId, Long testerId) {
-        try {
-            // Get the issue
-            Issue issue = issueRepo.findById(issueId)
-                                    .orElseThrow(() -> new IllegalArgumentException("Invalid issue ID"));
-
-            // tester가 reporter인지 확인
-            if (!issue.getReporter().getId().equals(testerId)) {
-                return new ResponseEntity<>("You are not authorized to verify resolution for this issue.", HttpStatus.FORBIDDEN);
-            }
-            // status enum에 fixed가 없어서 fixed인 상태로 가정했습니다
-
-            // issue가 제대로 해결되었는지 검사
-            //boolean resolutionVerified = issueService.verifyIssueResolved(issueId);
-
-            // issue가 해결된 상태
-            if (resolutionVerified) {
-                issueService.updateIssueStatus(issueId, testerId, Issue.Status.RESOLVED);
-                return new ResponseEntity<>("Issue resolution verified and status updated to resolved.", HttpStatus.OK);
-            } else {
-                return new ResponseEntity<>("Issue resolution verification failed.", HttpStatus.BAD_REQUEST);
-            }
-        } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }*/
-
     @PostMapping    //issue를 resolve로 변경
     public ResponseEntity<String> resolveIssue(Long issueId) {
         Issue issue = issueRepo.findById(issueId)   //issueId로 issue 찾음

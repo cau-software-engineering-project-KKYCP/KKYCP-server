@@ -93,6 +93,7 @@ public class Issue {
     public enum Status {
         NEW,
         ASSIGNED,
+        FIXED,
         RESOLVED,
         CLOSED,
         REOPENED
