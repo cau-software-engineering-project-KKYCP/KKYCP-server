@@ -17,9 +17,9 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
-@Profile("prod")
 public class SecurityConfig {
     @Bean
+    @Profile("prod")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .formLogin(form -> form
@@ -30,7 +30,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .exceptionHandling(exception -> exception.authenticationEntryPoint((request, response, authException) -> {}))
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/", "/signup", "/login").permitAll()
+                        request.requestMatchers("/", "/index.html", "/signup", "/login").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .build();
