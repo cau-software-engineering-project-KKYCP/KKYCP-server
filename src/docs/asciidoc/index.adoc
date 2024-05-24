@@ -17,8 +17,14 @@ operation::auth/login[snippets='http-request,form-parameters']
 
 operation::auth/login[snippets='http-response,curl-request,httpie-request']
 
-== 프로젝트
+== 어드민 작업
 
 === 프로젝트 생성
 
-operation::project/create[snippets='http-request,request-fields,http-response,response-fields,curl-request,httpie-request']
+operation::admin/add-person-to-project[snippets='http-request,path-parameters,http-response,curl-request,httpie-request']
+
+== 이슈
+
+== 이슈 페이지 조회
+
+operation::issue/get-simple-issue-page[snippets='http-request,path-parameters,query-parameters,http-response,curl-request,httpie-request']

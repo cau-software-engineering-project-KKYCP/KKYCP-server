@@ -1,10 +1,8 @@
-package org.kkycp.server.controller.dto;
+package org.kkycp.server.controller.admin;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 public class ProjectCreateDto {
     @Data
