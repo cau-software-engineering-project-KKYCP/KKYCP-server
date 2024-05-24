@@ -8,6 +8,7 @@ import org.springframework.lang.NonNull;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 public interface IssueRepo extends JpaRepository<Issue, Long>, IssueSearchRepo{
     /**
@@ -30,5 +31,8 @@ public interface IssueRepo extends JpaRepository<Issue, Long>, IssueSearchRepo{
 
     List<Issue> findAllByType(String string);
 
-    Issue findById(long issueid);
+    Optional<Issue> findById(long issueid);
+
+    @Query("select i from Issue i join fetch i.comments where i.id = :id")
+    Issue findByIdFetchComment(@Param("id") Long issueId);
 }

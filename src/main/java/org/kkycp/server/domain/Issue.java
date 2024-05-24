@@ -2,10 +2,12 @@ package org.kkycp.server.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.springframework.util.Assert;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Getter
@@ -72,6 +74,29 @@ public class Issue {
         comments.add(comment);
     }
 
+    public void deleteComment(Comment comment) {
+        comments.remove(comment);
+    }
+
+    @Override
+    public final boolean equals(Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Issue issue)) {
+            return false;
+        }
+
+        Objects.requireNonNull(id);
+        return id.equals(issue.id);
+    }
+
+    @Override
+    public int hashCode() {
+        Objects.requireNonNull(id);
+        return id.hashCode();
+    }
+
     public enum Priority {
         BLOCKER,
         CRITICAL,
@@ -87,4 +112,6 @@ public class Issue {
         CLOSED,
         REOPENED
     }
+
+
 }

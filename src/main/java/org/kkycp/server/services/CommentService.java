@@ -1,26 +1,41 @@
 package org.kkycp.server.services;
 
+import lombok.RequiredArgsConstructor;
 import org.kkycp.server.domain.Issue;
 import org.kkycp.server.domain.Comment;
+import org.kkycp.server.domain.User;
 import org.kkycp.server.repo.CommentRepo;
+import org.kkycp.server.repo.UserRepo;
+import org.kkycp.server.repo.issue.IssueRepo;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+
+@Service
+@Transactional
+@RequiredArgsConstructor
 public class CommentService {
+    private final IssueRepo issueRepo;
     private final CommentRepo commentRepo;
+    private final UserRepo userRepo;
 
-    public void sending(long issueid, String content, LocalDate createdDate ,User commenter){
-        Issue issue = IssueService.findIssue(issueid);
-        Comment comment= new(comment(content, createdDate, commenter));
-        commentRepo.StoreComment(issue, comment);
+    public void commentIssue(long issueid, String commenterName, String content, LocalDate createdDate){
+        Issue issue = issueRepo.findById(issueid).get();
+        User commenter = userRepo.findByUsername(commenterName).get();
+        Comment comment= new Comment(commenter, content, createdDate);
+        issue.addComment(comment);
     }
 
-    public void deletion(long issueid, long commentid){
-        Issue issue = IssueService.findIssue(issueid);
-        commentRepo.DeleteComment(issue, commentid);
+    public void deleteComment(long issueId, long commentId){
+        Issue commentedIssue = issueRepo.findById(issueId).get();
+        Comment comment = commentRepo.findById(commentId).get();
+        commentedIssue.deleteComment(comment);
     }
 
-    public void modification(long issueid, long commentid, String content){
-        Issue issue = IssueService.findIssue(issueid);
-        commentRepo.ModificateComment(issue, commentid, content);
+    public void updateComment(long commentId, String content, LocalDate localDate){
+        Comment comment = commentRepo.findById(commentId).get();
+        comment.updateContent(content, localDate);
     }
 }
 

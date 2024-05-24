@@ -16,6 +16,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class IssueService {
     private final ProjectService projectservice;
+    private final IssueRepo issueRepo;
 
     /*
     Report report; // Issue의 attribution들을 담은 객체
@@ -27,12 +28,7 @@ public class IssueService {
         project.reportIssue(report, createdDated);
     }
 
-    public static Issue findIssue(long issueid){
-        return IssueRepo.findbyId(issueid);
-    }
-
-    public Issue getDescription(long projectid, long issueid){
-        Project project =projectservice.findProject(projectid);
-        return project.getIssues(issueid);
+    public Issue findIssue(long issueid){
+        return issueRepo.findById(issueid).get();
     }
 }
