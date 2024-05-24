@@ -23,7 +23,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @SpringBootTest
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc(printOnlyOnFailure = false)
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @Transactional
 public class SignUpAndLoginTest {
     private static final String TEST_USERNAME = "test1";
@@ -36,7 +35,6 @@ public class SignUpAndLoginTest {
     private UserRegisterService registerService;
 
     @Test
-    @Order(1)
     public void signUp() throws Exception {
         mockMvc.perform(post("/signup")
                         .contentType(MediaType.APPLICATION_FORM_URLENCODED)
@@ -51,7 +49,6 @@ public class SignUpAndLoginTest {
     }
 
     @Test
-    @Order(2)
     public void login() throws Exception {
         registerService.signUp(new RegisterDto.Request(TEST_USERNAME, TEST_PASSWORD));
 
@@ -75,7 +72,6 @@ public class SignUpAndLoginTest {
     }
 
     @Test
-    @Order(3)
     public void login_fail() throws Exception {
         registerService.signUp(new RegisterDto.Request(TEST_USERNAME, TEST_PASSWORD));
 

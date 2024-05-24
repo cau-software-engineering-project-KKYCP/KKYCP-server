@@ -11,27 +11,47 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
-@Profile("production")
 public class SecurityConfig {
     @Bean
+    @Profile("prod")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        return http
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
-                .formLogin(form -> form
-                        .successHandler(new NullAuthenticationSuccessHandler())
+        applySecurityConfiguration(http);
+        http.exceptionHandling(exception -> exception.authenticationEntryPoint(
+                (request, response, authException) -> {}
+        ));
+        return http.build();
+    }
+
+    public static void applySecurityConfiguration(HttpSecurity http) throws Exception {
+        http.formLogin(form -> form.successHandler(new NullAuthenticationSuccessHandler())
                         .failureHandler(new SimpleUrlAuthenticationFailureHandler()))
-                .exceptionHandling(exception -> exception.authenticationEntryPoint((request, response, authException) -> {}))
-                .authorizeHttpRequests(request ->
-                        request.requestMatchers("/").permitAll()
-                                .requestMatchers("/signup").anonymous()
-                                .anyRequest().authenticated()
-                )
-                .build();
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsSource()))
+                .sessionManagement(
+                        session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
+
+                .authorizeHttpRequests(
+                        request -> request.requestMatchers("/", "/index.html", "/signup", "/login")
+                                .permitAll()
+                                .anyRequest()
+                                .authenticated());
+    }
+
+    public static CorsConfigurationSource corsSource() {
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
     @Bean

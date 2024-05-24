@@ -22,4 +22,7 @@ public interface UserRepo extends CrudRepository<User, Long> {
      */
     @Query("select u from User u where (select count(i) from Issue i where i.project = :project and i.assignee = u and i.status = 'ASSIGNED') <= :cap")
     List<User> findAllAvailables(@Param("project") Project targetProject, @Param("cap") int capAssignedIssues);
+
+    @Query("select u from User u join fetch u.projectRegistration.participations where u.username = :username")
+    Optional<User> findByUsernameFetchParticipation(@Param("username") String username);
 }
