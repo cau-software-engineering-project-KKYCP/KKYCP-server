@@ -27,3 +27,9 @@ filter라는 새로운 도메인 모델 만들어서
 선택에 따라 날짜, 우선순위, 상태 통계 보여주도록 설정
 
 issueList 반환
+
++  의문점
+
+findIssue와 getDescription 기능이 겹침
+
+CountIssueRepo라는 다른 인터페이스 만듦 기존에 IssueRepo 있지만 Project 파라미터 필요할 것 같아 새로 만듦
