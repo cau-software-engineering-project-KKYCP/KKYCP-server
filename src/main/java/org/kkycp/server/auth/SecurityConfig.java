@@ -11,6 +11,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.CorsConfigurationSource;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 @Configuration
 @EnableWebSecurity
@@ -23,7 +26,7 @@ public class SecurityConfig {
                         .successHandler(new NullAuthenticationSuccessHandler())
                         .failureHandler(new SimpleUrlAuthenticationFailureHandler()))
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsSource()))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .exceptionHandling(exception -> exception.authenticationEntryPoint((request, response, authException) -> {}))
                 .authorizeHttpRequests(request ->
@@ -31,6 +34,17 @@ public class SecurityConfig {
                                 .anyRequest().authenticated()
                 )
                 .build();
+    }
+
+    @Bean
+    public CorsConfigurationSource corsSource() {
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOrigin("*");
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**", config);
+        return source;
     }
 
     @Bean
