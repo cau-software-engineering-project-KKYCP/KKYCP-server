@@ -27,8 +27,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
                 .exceptionHandling(exception -> exception.authenticationEntryPoint((request, response, authException) -> {}))
                 .authorizeHttpRequests(request ->
-                        request.requestMatchers("/").permitAll()
-                                .requestMatchers("/signup").anonymous()
+                        request.requestMatchers("/", "/signup", "/login").permitAll()
                                 .anyRequest().authenticated()
                 )
                 .build();
