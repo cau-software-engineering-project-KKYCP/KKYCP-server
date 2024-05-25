@@ -6,6 +6,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.kkycp.server.controller.admin.AdminController;
 import org.kkycp.server.controller.admin.ProjectCreateDto;
 import org.kkycp.server.controller.admin.UserRegisterDto;
+import org.kkycp.server.domain.User;
+import org.kkycp.server.domain.authorization.Privilege;
+import org.kkycp.server.repo.UserPrivilegeRecord;
 import org.kkycp.server.services.PrivilegeService;
 import org.kkycp.server.services.ProjectService;
 import org.kkycp.server.services.UserService;
@@ -19,12 +22,15 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Set;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
-import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
+import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.*;
-import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
-import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
+import static org.springframework.restdocs.request.RequestDocumentation.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -91,6 +97,59 @@ public class AdminControllerTest {
                         requestFields(
                                 fieldWithPath("username").description(
                                         "추가할 유저의 username.\n만약 해당 유저가 존재하지 않으면 404 Not found, 이미 해당 유저가 프로젝트에 참가해 있으면 409 Conflict로 응답.")
+                        )
+                ));
+    }
+
+    @Test
+    public void getPrivileges() throws Exception {
+        List<UserPrivilegeRecord> userPrivileges = new ArrayList<>();
+        userPrivileges.add(new UserPrivilegeRecord(new User("test user1"), Set.of(Privilege.ADMIN)));
+        userPrivileges.add(new UserPrivilegeRecord(new User("test user1"), Set.of(Privilege.PARTICIPANT, Privilege.TRIAGER)));
+        userPrivileges.add(new UserPrivilegeRecord(new User("test user1"), Set.of(Privilege.PARTICIPANT)));
+        userPrivileges.add(new UserPrivilegeRecord(new User("test user1"), Set.of(Privilege.PARTICIPANT, Privilege.VERIFIER, Privilege.REPORTER)));
+
+
+        Mockito.when(privilegeService.getAllUserPrivileges(any(Long.class))).thenReturn(userPrivileges);
+
+        long projectId = 12;
+        mockMvc.perform(get("/project/{projectId}/privileges", projectId)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("admin/get-privileges",
+                        pathParameters(
+                                parameterWithName("projectId").description("프로젝트 id")
+                        ),
+                        responseFields(
+                                fieldWithPath("[].username").description("유저 이름"),
+                                fieldWithPath("[].privileges").description("유저 권한")
+                        )
+                ));
+    }
+
+    // 4. Test for grantUser endpoint
+    @Test
+    public void grantUser() throws Exception {
+        Mockito.doNothing().when(userService).replaceUserPrivileges(any(String.class), any(Long.class), any(List.class));
+
+        long projectId = 12;
+        String username = "test user";
+        List<Privilege> privileges = List.of(Privilege.PARTICIPANT, Privilege.TRIAGER, Privilege.VERIFIER, Privilege.REPORTER);
+
+        mockMvc.perform(put("/project/{projectId}/privileges", projectId)
+                        .param("username", username)
+                        .content(objectMapper.writeValueAsString(privileges))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andDo(document("admin/grant-user",
+                        pathParameters(
+                                parameterWithName("projectId").description("프로젝트 id")
+                        ),
+                        queryParameters(
+                                parameterWithName("username").description("유저 이름")
+                        ),
+                        requestFields(
+                                fieldWithPath("[]").description("권한의 리스트")
                         )
                 ));
     }

@@ -5,11 +5,12 @@
 :toclevels: 2
 :sectlinks:
 
-== 회원가입
+== 인증
+=== 회원가입
 
 operation::auth/signup[snippets='http-request,form-parameters,http-response,curl-request,httpie-request']
 
-== 로그인
+=== 로그인
 
 operation::auth/login[snippets='http-request,form-parameters']
 
@@ -17,14 +18,64 @@ operation::auth/login[snippets='http-request,form-parameters']
 
 operation::auth/login[snippets='http-response,curl-request,httpie-request']
 
+=== 로그아웃
+
+POST /logout 으로 요청한다.
+
 == 어드민 작업
 
 === 프로젝트 생성
 
 operation::admin/add-person-to-project[snippets='http-request,path-parameters,http-response,curl-request,httpie-request']
 
+=== 프로젝트에 유저 추가
+
+operation::admin/add-person-to-project[snippets='http-request,path-parameters,http-response,curl-request,httpie-request']
+
+=== 프로젝트의 유저 권한들 조회
+
+operation::admin/get-privileges[snippets='http-request,path-parameters,http-response,curl-request,httpie-request']
+
+=== 프로젝트의 유저 권한 수정
+
+operation::admin/grant-user[snippets='http-request,path-parameters,query-parameters,http-response,curl-request,httpie-request']
+
 == 이슈
 
-== 이슈 페이지 조회
+=== 이슈 생성
 
-operation::issue/get-simple-issue-page[snippets='http-request,path-parameters,query-parameters,http-response,curl-request,httpie-request']
+operation::create-issue[snippets='http-request,request-fields,http-response,curl-request,httpie-request']
+
+=== 이슈 페이지 조회
+
+operation::get-simplified-issues[snippets='http-request,http-response,response-fields,curl-request,httpie-request']
+
+=== 이슈 페이지 검색
+
+operation::search-simplified-issues[snippets='http-request,query-parameters,http-response,response-fields,curl-request,httpie-request']
+
+=== 이슈 상세정보 조회
+
+operation::get-issue[snippets='http-request,http-response,response-fields,curl-request,httpie-request']
+
+=== 이슈 할당
+
+operation::assign-issue[snippets='http-request,request-fields,http-response,curl-request,httpie-request']
+
+=== 이슈 고침
+
+operation::fix-issue[snippets='http-request,request-fields,http-response,curl-request,httpie-request']
+
+=== 이슈 통계
+
+operation::get-statistics-by-time[snippets='http-request,query-parameters,http-response,response-fields,curl-request,httpie-request']
+
+== 유저 조회
+
+=== 단일 유저 조회
+
+operation::get-users-of-project-with-username[snippets='http-request,query-parameters,http-response,response-fields,curl-request,httpie-request']
+
+=== 모든 유저 조회
+
+operation::get-users-of-project-without-username[snippets='http-request,http-response,response-fields,curl-request,httpie-request']

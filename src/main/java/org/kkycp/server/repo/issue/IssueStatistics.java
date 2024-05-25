@@ -7,7 +7,7 @@ public class IssueStatistics {
     @Data
     @AllArgsConstructor
     public static class Time {
-        private String timeUnit;
+        private String time;
         private Long count;
     }
 

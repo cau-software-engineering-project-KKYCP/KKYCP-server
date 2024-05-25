@@ -15,6 +15,7 @@ import java.time.LocalDate;
 public class SimpleIssueDto {
     private Long id;
     private String title;
+    private String reporter;
     private LocalDate reportedDate;
     private Issue.Priority priority;
     private Issue.Status status;

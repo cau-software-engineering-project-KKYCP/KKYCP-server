@@ -50,7 +50,7 @@ public class IssueService {
                                                     int offset, int limit) {
         List<Issue> foundIssues = issueRepo.search(projectId, searchCondition, offset, limit);
         return foundIssues.stream()
-                .map(i -> new SimpleIssueDto(i.getId(), i.getTitle(), i.getReportedDate(),
+                .map(i -> new SimpleIssueDto(i.getId(), i.getTitle(), i.getReporter().getUsername(), i.getReportedDate(),
                         i.getPriority(), i.getStatus(), i.getType()))
                 .toList();
     }

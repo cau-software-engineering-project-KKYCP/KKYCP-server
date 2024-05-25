@@ -1,11 +1,16 @@
 package org.kkycp.server.controller.issue;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import org.kkycp.server.domain.Issue;
 import org.kkycp.server.repo.issue.IssueSearchCondition;
 import org.springframework.web.bind.annotation.BindParam;
 
-@Getter
+@Data
+@NoArgsConstructor
 public class SearchConditionDto {
     private String assigneeName = null;
     private String reporterName = null;
