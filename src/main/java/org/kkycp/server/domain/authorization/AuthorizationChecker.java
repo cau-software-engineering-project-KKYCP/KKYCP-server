@@ -9,7 +9,6 @@ import org.kkycp.server.repo.UserRepo;
 import org.springframework.stereotype.Component;
 
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Component
 @RequiredArgsConstructor

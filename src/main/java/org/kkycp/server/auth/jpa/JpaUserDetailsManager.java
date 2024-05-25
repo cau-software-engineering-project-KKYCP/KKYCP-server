@@ -1,6 +1,7 @@
 package org.kkycp.server.auth.jpa;
 
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,11 +10,10 @@ import org.springframework.security.provisioning.UserDetailsManager;
 import org.springframework.stereotype.Component;
 
 @Component
+@RequiredArgsConstructor
 public class JpaUserDetailsManager implements UserDetailsManager {
 
-    @Autowired
-    private AuthUserDetailsRepository repository;
-
+    private final AuthUserDetailsRepository repository;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

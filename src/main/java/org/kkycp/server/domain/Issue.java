@@ -2,7 +2,7 @@ package org.kkycp.server.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.util.Assert;
+import org.kkycp.server.exceptions.IllegalIssueStatusTransitionException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -16,14 +16,15 @@ public class Issue {
     @Id
     @GeneratedValue
     private Long id;
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "project_id")
     @Getter(AccessLevel.NONE)
     private Project project;
 
+    @Setter
     private String title;
 
+    @Setter
     private String description;
 
     @OneToOne(fetch = FetchType.LAZY)
@@ -41,13 +42,14 @@ public class Issue {
     private User assignee;
 
     @Enumerated(EnumType.STRING)
+    @Setter
     private Priority priority;
 
     @Enumerated(EnumType.STRING)
     private Status status;
 
+    @Setter
     private String type;
-
     @OneToMany(mappedBy = "parentIssue", fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comment> comments = new ArrayList<>();
 
@@ -70,6 +72,24 @@ public class Issue {
         this.status = Status.NEW;
     }
 
+    public void assignIssue(User assignee) {
+        if (!Status.ASSIGNED.canTransitionFrom(this.status)) {
+            throw new IllegalIssueStatusTransitionException();
+        }
+
+        this.status = Status.ASSIGNED;
+        this.assignee = assignee;
+    }
+
+    public void fixIssue(User fixer) {
+        if (!Status.FIXED.canTransitionFrom(this.status)) {
+            throw new IllegalIssueStatusTransitionException();
+        }
+
+        this.status = Status.FIXED;
+        this.fixer = fixer;
+    }
+
     public void addComment(Comment comment) {
         comment.setParentIssue(this);
         comments.add(comment);
@@ -77,6 +97,13 @@ public class Issue {
 
     public void deleteComment(Comment comment) {
         comments.remove(comment);
+    }
+
+    public void changeStatus(Status desiredStatus) {
+        if (!desiredStatus.canTransitionFrom(this.status)) {
+            throw new IllegalIssueStatusTransitionException();
+        }
+        this.status = desiredStatus;
     }
 
     @Override
@@ -107,13 +134,25 @@ public class Issue {
     }
 
     public enum Status {
-        NEW,
-        ASSIGNED,
-        FIXED,
-        RESOLVED,
-        CLOSED,
-        REOPENED
+        NEW(null),
+        ASSIGNED(NEW),
+        FIXED(ASSIGNED),
+        RESOLVED(FIXED),
+        CLOSED(RESOLVED),
+        REOPENED(RESOLVED);
+
+        private final Status possiblePreviousStatus;
+
+        Status(Status possiblePreviousStatus) {
+            this.possiblePreviousStatus = possiblePreviousStatus;
+        }
+
+        public boolean canTransitionFrom(Status previousStatus) {
+            //ASSIGNED: Cannot refer to enum constant 'REOPENED' before its definition
+            if (this == ASSIGNED) {
+                return previousStatus == REOPENED || previousStatus == possiblePreviousStatus;
+            }
+            return previousStatus == possiblePreviousStatus;
+        }
     }
-
-
 }

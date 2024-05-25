@@ -28,4 +28,10 @@ public interface UserRepo extends CrudRepository<User, Long> {
 
     @Query("select new org.kkycp.server.repo.UserPrivilegeRecord(p.user, p.privileges) from Participation p where p.participatedProject.id = :projectId")
     List<UserPrivilegeRecord> getAllUserPrivileges(@Param("projectId") Long projectId);
+
+    @Query("select u from User u " +
+            "join Participation p1 on u = p1.user " +
+            "join Project p2 on p1.participatedProject = p2 " +
+            "where p2.id = :projectId")
+    List<User> findAllByProjectId(Long projectId);
 }

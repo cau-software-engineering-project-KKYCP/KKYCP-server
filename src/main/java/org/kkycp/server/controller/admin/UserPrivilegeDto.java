@@ -5,9 +5,7 @@ import lombok.Data;
 import org.kkycp.server.domain.authorization.Privilege;
 
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Set;
 
 import static java.util.Comparator.naturalOrder;
 
@@ -33,7 +31,7 @@ public class UserPrivilegeDto {
 
         public Response(String username, Collection<Privilege> privileges) {
             this.username = username;
-            privileges = privileges.stream().sorted(naturalOrder()).toList();
+            this.privileges = privileges.stream().sorted(naturalOrder()).toList();
         }
     }
 }

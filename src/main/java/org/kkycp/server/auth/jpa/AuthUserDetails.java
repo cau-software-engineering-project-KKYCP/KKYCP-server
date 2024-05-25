@@ -2,7 +2,6 @@ package org.kkycp.server.auth.jpa;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.*;
@@ -18,13 +17,13 @@ public class AuthUserDetails implements UserDetails {
     private String username;
     @Setter
     private String password;
-    private boolean accountNonExpired = true;
-    private boolean accountNonLocked = true;
-    private boolean credentialsNonExpired = true;
-    private boolean enabled = true;
+    private final boolean accountNonExpired = true;
+    private final boolean accountNonLocked = true;
+    private final boolean credentialsNonExpired = true;
+    private final boolean enabled = true;
 
     @OneToMany(mappedBy = "authUserDetails", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<AuthGrantedAuthority> authorities = new HashSet<>();
+    private final Set<AuthGrantedAuthority> authorities = new HashSet<>();
 
     @Builder
     public AuthUserDetails(String username, String password) {

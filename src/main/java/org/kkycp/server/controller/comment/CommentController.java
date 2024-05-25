@@ -1,8 +1,10 @@
 package org.kkycp.server.controller.comment;
 
 import lombok.RequiredArgsConstructor;
+import org.kkycp.server.auth.jpa.AuthUserDetails;
 import org.kkycp.server.services.CommentService;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -15,10 +17,9 @@ public class CommentController {
     @ResponseStatus(HttpStatus.CREATED)
     public void postComment(@PathVariable("projectId") long projectId,
                             @PathVariable("issueId") long issueId,
-                            @RequestBody CommentDto.Request request) {
-        //TODO AUTH
-        String commenterName = null;
-        commentService.commentIssue(issueId, commenterName, request.getComment(), request.getCreatedDate());
+                            @RequestBody CommentDto.Request request,
+                            @AuthenticationPrincipal AuthUserDetails authUser) {
+        commentService.commentIssue(issueId, authUser.getUsername(), request.getComment(), request.getCreatedDate());
     }
 
     //put comment
@@ -27,7 +28,6 @@ public class CommentController {
                            @PathVariable("issueId") long issueId,
                            @PathVariable("commentId") long commentId,
                            @RequestBody CommentDto.Request request) {
-        //TODO AUTH
         commentService.updateComment(commentId, request.getComment(), request.getCreatedDate());
     }
 
@@ -35,7 +35,6 @@ public class CommentController {
     public void deleteComment(@PathVariable("projectId") long projectId,
                               @PathVariable("issueId") long issueId,
                               @PathVariable("commentId") long commentId) {
-        //TODO AUTH
         commentService.deleteComment(issueId, commentId);
     }
 }

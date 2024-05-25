@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public interface IssueRepo extends JpaRepository<Issue, Long>, IssueSearchRepo{
+public interface IssueRepo extends JpaRepository<Issue, Long>, IssueSearchRepo, IssueStatisticsRepo{
     /**
      * statistical method for counting issues between two dates.
      *<p>
@@ -35,4 +35,6 @@ public interface IssueRepo extends JpaRepository<Issue, Long>, IssueSearchRepo{
 
     @Query("select i from Issue i join fetch i.comments where i.id = :id")
     Issue findByIdFetchComment(@Param("id") Long issueId);
+
+
 }

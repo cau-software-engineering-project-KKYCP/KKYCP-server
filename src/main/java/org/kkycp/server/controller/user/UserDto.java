@@ -1,13 +1,14 @@
 package org.kkycp.server.controller.user;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.Value;
-
-import java.io.Serializable;
+import lombok.NoArgsConstructor;
 
 public class UserDto {
     @Data
-    public class Response {
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Response {
         String username;
     }
 }

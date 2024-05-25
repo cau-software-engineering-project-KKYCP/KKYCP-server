@@ -1,8 +1,6 @@
 package org.kkycp.server.services;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
 import org.kkycp.server.domain.Issue;
@@ -33,8 +31,8 @@ public class ProjectService {
         }
     }
     
-    public Optional<Project> findProject(long projectId) {
-        return projectRepo.findById(projectId);
+    public Project findProject(long projectId) {
+        return projectRepo.findById(projectId).get();
     }
 
 

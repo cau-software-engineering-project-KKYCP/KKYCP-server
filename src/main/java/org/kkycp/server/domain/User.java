@@ -8,7 +8,6 @@ import org.kkycp.server.domain.authorization.Privilege;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.List;
 
 @Entity
