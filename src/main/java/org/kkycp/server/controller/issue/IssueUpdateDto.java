@@ -1,6 +1,9 @@
 package org.kkycp.server.controller.issue;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.fasterxml.jackson.annotation.JsonInclude;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.kkycp.server.domain.Issue;
@@ -14,7 +17,10 @@ public class IssueUpdateDto {
 
     @Data
     @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
     public static class Request {
         private String title;
         private String description;

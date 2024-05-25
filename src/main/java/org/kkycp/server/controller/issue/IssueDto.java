@@ -1,21 +1,29 @@
 package org.kkycp.server.controller.issue;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.kkycp.server.domain.Issue;
 
 import java.time.LocalDate;
 
 public class IssueDto {
     @Data
+    @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
     public static class Request {
         private String title;
         private String description;
         private Issue.Priority priority;
-        private Issue.Status status;
         private String type;
     }
 
     @Data
+    @NoArgsConstructor
+    @Builder
+    @AllArgsConstructor
     public static class Response {
         private Long id;
         private String title;
@@ -35,8 +43,12 @@ public class IssueDto {
             response.setDescription(issue.getDescription());
             response.setReporter(issue.getReporter().getUsername());
             response.setReportedDate(issue.getReportedDate());
-            response.setFixer(issue.getFixer().getUsername());
-            response.setAssignee(issue.getAssignee().getUsername());
+            if (issue.getFixer() != null) {
+                response.setFixer(issue.getFixer().getUsername());
+            }
+            if (issue.getAssignee() != null) {
+                response.setAssignee(issue.getAssignee().getUsername());
+            }
             response.setPriority(issue.getPriority());
             response.setStatus(issue.getStatus());
             response.setType(issue.getType());

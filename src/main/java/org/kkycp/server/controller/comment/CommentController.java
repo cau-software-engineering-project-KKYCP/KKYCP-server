@@ -5,6 +5,7 @@ import org.kkycp.server.auth.jpa.AuthUserDetails;
 import org.kkycp.server.services.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -18,7 +19,7 @@ public class CommentController {
     public void postComment(@PathVariable("projectId") long projectId,
                             @PathVariable("issueId") long issueId,
                             @RequestBody CommentDto.Request request,
-                            @AuthenticationPrincipal AuthUserDetails authUser) {
+                            @AuthenticationPrincipal UserDetails authUser) {
         commentService.commentIssue(issueId, authUser.getUsername(), request.getComment(), request.getCreatedDate());
     }
 

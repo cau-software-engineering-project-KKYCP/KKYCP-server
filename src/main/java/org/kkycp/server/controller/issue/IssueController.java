@@ -1,7 +1,6 @@
 package org.kkycp.server.controller.issue;
 
 import lombok.RequiredArgsConstructor;
-import org.kkycp.server.auth.jpa.AuthUserDetails;
 import org.kkycp.server.domain.Issue;
 import org.kkycp.server.domain.Report;
 import org.kkycp.server.repo.issue.IssueStatistics;
@@ -9,6 +8,7 @@ import org.kkycp.server.repo.issue.TimeUnit;
 import org.kkycp.server.services.IssueService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -32,7 +32,7 @@ public class IssueController {
     @ResponseStatus(HttpStatus.CREATED)
     public void createIssue(@PathVariable("projectId") long projectId,
                             @RequestBody IssueDto.Request request,
-                            @AuthenticationPrincipal AuthUserDetails authUser) {
+                            @AuthenticationPrincipal UserDetails authUser) {
         String reporter = authUser.getUsername();
         Report report = Report.builder()
                 .title(request.getTitle())
