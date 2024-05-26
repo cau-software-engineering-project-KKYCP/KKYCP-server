@@ -9,6 +9,8 @@ import java.io.Serializable;
 import java.util.*;
 
 @Entity
+@Table(name = "auth_user",
+        uniqueConstraints = @UniqueConstraint(columnNames = "username"))
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class AuthUserDetails implements UserDetails, Serializable {
