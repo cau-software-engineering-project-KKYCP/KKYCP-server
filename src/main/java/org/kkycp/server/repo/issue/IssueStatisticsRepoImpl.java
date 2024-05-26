@@ -18,7 +18,7 @@ public class IssueStatisticsRepoImpl implements IssueStatisticsRepo {
     @Override
     public List<IssueStatistics.Time> countIssueGroupByTime(TimeUnit timeUnit) {
         return queryFactory.select(Projections.constructor(IssueStatistics.Time.class,
-                                new Class[]{String.class, Long.class},
+                                new Class[]{Object.class, Long.class},
                                 timeUnit.groupBy(issue.reportedDate), issue.count()))
                 .from(issue).fetch();
     }

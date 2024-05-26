@@ -32,7 +32,10 @@ public class ProjectService {
             throw new DuplicatedProjectException(e);
         }
     }
-    
+    public List<Project> findAllProjects() {
+        return projectRepo.findAll();
+    }
+
     public Project findProject(long projectId) {
         return projectRepo.findById(projectId).get();
     }

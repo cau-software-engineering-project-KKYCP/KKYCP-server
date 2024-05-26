@@ -7,7 +7,8 @@ public class IssueStatistics {
     @Data
     @AllArgsConstructor
     public static class Time {
-        private String time;
+        //year, month, day format are different
+        private Object time;
         private Long count;
     }
 

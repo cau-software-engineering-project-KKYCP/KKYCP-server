@@ -40,6 +40,12 @@ operation::admin/get-privileges[snippets='http-request,path-parameters,http-resp
 
 operation::admin/grant-user[snippets='http-request,path-parameters,query-parameters,http-response,curl-request,httpie-request']
 
+== 프로젝트
+
+=== 모든 프로젝트 가져오기
+
+GET /project
+
 == 이슈
 
 === 이슈 생성
