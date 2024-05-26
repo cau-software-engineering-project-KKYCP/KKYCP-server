@@ -36,6 +36,7 @@ public class Participation {
     public Participation(User user, Project participatedProject) {
         this.participatedProject = participatedProject;
         this.user = user;
+        privileges.add(Privilege.PARTICIPANT);
     }
 
     void addPrivilege(Privilege privilege) {
