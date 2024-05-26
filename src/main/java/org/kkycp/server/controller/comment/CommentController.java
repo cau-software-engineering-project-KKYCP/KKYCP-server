@@ -1,12 +1,13 @@
 package org.kkycp.server.controller.comment;
 
 import lombok.RequiredArgsConstructor;
-import org.kkycp.server.auth.jpa.AuthUserDetails;
 import org.kkycp.server.services.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequiredArgsConstructor
@@ -20,7 +21,7 @@ public class CommentController {
                             @PathVariable("issueId") long issueId,
                             @RequestBody CommentDto.Request request,
                             @AuthenticationPrincipal UserDetails authUser) {
-        commentService.commentIssue(issueId, authUser.getUsername(), request.getComment(), request.getCreatedDate());
+        commentService.commentIssue(issueId, authUser.getUsername(), request.getComment(), LocalDate.now());
     }
 
     //put comment
@@ -29,7 +30,7 @@ public class CommentController {
                            @PathVariable("issueId") long issueId,
                            @PathVariable("commentId") long commentId,
                            @RequestBody CommentDto.Request request) {
-        commentService.updateComment(commentId, request.getComment(), request.getCreatedDate());
+        commentService.updateComment(commentId, request.getComment(), LocalDate.now());
     }
 
     @DeleteMapping("/project/{projectId}/issues/{issueId}/comments/{commentId}")
