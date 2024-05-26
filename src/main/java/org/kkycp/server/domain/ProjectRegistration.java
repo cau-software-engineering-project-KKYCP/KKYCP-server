@@ -3,6 +3,7 @@ package org.kkycp.server.domain;
 import jakarta.persistence.*;
 import lombok.NoArgsConstructor;
 import org.kkycp.server.domain.authorization.Privilege;
+import org.kkycp.server.exceptions.UserAlreadyParticipatingException;
 import org.kkycp.server.exceptions.UserNotParticipatingException;
 
 import java.util.*;
@@ -22,6 +23,9 @@ public class ProjectRegistration {
     }
 
     public void register(User user, Project project) {
+        if (participations.containsKey(project)) {
+            throw new UserAlreadyParticipatingException();
+        }
         Participation newParticipation = new Participation(user, project);
         participations.put(project, newParticipation);
     }

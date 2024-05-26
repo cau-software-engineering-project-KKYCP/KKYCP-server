@@ -104,9 +104,9 @@ public class AdminControllerTest {
     @Test
     public void getPrivileges() throws Exception {
         List<UserPrivilegeRecord> userPrivileges = new ArrayList<>();
-        userPrivileges.add(new UserPrivilegeRecord(new User("test user1"), Set.of(Privilege.ADMIN)));
-        userPrivileges.add(new UserPrivilegeRecord(new User("test user1"), Set.of(Privilege.PARTICIPANT, Privilege.TRIAGER)));
         userPrivileges.add(new UserPrivilegeRecord(new User("test user1"), Set.of(Privilege.PARTICIPANT)));
+        userPrivileges.add(new UserPrivilegeRecord(new User("test user1"), Set.of(Privilege.PARTICIPANT, Privilege.TRIAGER)));
+        userPrivileges.add(new UserPrivilegeRecord(new User("test user1"), Set.of(Privilege.PARTICIPANT, Privilege.TESTER)));
         userPrivileges.add(new UserPrivilegeRecord(new User("test user1"), Set.of(Privilege.PARTICIPANT, Privilege.VERIFIER, Privilege.REPORTER)));
 
 
@@ -149,7 +149,16 @@ public class AdminControllerTest {
                                 parameterWithName("username").description("유저 이름")
                         ),
                         requestFields(
-                                fieldWithPath("[]").description("권한의 리스트")
+                                fieldWithPath("[]").description("""
+                                        권한의 리스트. PARTICIPANT 권한은 부여하지 않아도 항상 부여된다.
+                                        
+                                         부여 가능 권한:
+                                         PARTICIPANT in the project: 해당 프로젝트의 이슈 생성과 조회, 통계 조회, 코멘트 달기 가능. 자신에게 할당된 이슈를 고칠 수 있음
+                                         REPORTER: 해당 프로젝트의 이슈 생성
+                                         TRIAGER: 해당 프로젝트의 구성원에게 이슈 할당
+                                         TESTER: fixed 상태의 이슈를 resolved 상태로 전환하거나, 해결이 안된 경우 다시 assigned로 전환
+                                         VERIFIER: resolved 상태의 이슈를 closed 로 바꿈
+                                        """)
                         )
                 ));
     }

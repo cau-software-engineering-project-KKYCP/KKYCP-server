@@ -6,10 +6,12 @@ import org.junit.jupiter.api.Test;
 import org.kkycp.server.domain.Participation;
 import org.kkycp.server.domain.Project;
 import org.kkycp.server.domain.User;
+import org.kkycp.server.domain.authorization.Privilege;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -29,34 +31,36 @@ public class UserRepoTest {
 
     @BeforeEach
     void setupEach() {
-        user1 = new User("test user 1");
-        user2 = new User("test user 2");
-        user3 = new User("test user 3");
-        em.persist(user1);
-        em.persist(user2);
-        em.persist(user3);
-
         project1 = new Project("test project 1");
         project2 = new Project("test project 2");
 
         em.persist(project1);
         em.persist(project2);
 
-        participations = List.of(
-                new Participation(user1, project1),
-                new Participation(user2, project1),
-                new Participation(user3, project1),
-                new Participation(user1, project2),
-                new Participation(user2, project2)
-        );
+        user1 = new User("test user 1");
+        user2 = new User("test user 2");
+        user3 = new User("test user 3");
 
-        participations.forEach(em::persist);
+        em.persist(user1);
+        em.persist(user2);
+        em.persist(user3);
+
+        user1.participate(project1);
+        user2.participate(project1);
+
+        user1.participate(project2);
+        user2.participate(project2);
+        user3.participate(project2);
+
+        user1.replacePrivileges(project1, Set.of(Privilege.PARTICIPANT));
+        user2.replacePrivileges(project1, Set.of(Privilege.PARTICIPANT, Privilege.REPORTER));
+
         assertThat(project1.getId()).isNotNull();
     }
 
     @Test
     void getAllParticipationOfProject() {
-        List<UserPrivilegeRecord> userPrivileges = userRepo.getAllUserPrivileges(project2.getId());
-        assertThat(userPrivileges).isNotEmpty();
+        List<UserPrivilegeRecord> userPrivileges = userRepo.getAllUserPrivileges(project1.getId());
+        assertThat(userPrivileges).hasSize(2);
     }
 }

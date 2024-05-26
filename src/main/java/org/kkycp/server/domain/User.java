@@ -29,7 +29,7 @@ public class User {
         this.projectRegistration = new ProjectRegistration();
     }
 
-    public void register(Project project) {
+    public void participate(Project project) {
         projectRegistration.register(this, project);
     }
 
@@ -41,8 +41,13 @@ public class User {
         projectRegistration.addPrivilege(grantedProject, privilege);
     }
 
+    /**
+     *
+     * @param privileges even though participation privilege is not specified, it always gets in.
+     */
     public void replacePrivileges(Project grantedProject, Collection<Privilege> privileges) {
         projectRegistration.replacePrivileges(grantedProject, privileges);
+        addPrivilege(grantedProject, Privilege.PARTICIPANT);
     }
 
     public boolean hasPrivilege(Project project, Privilege privilege) {

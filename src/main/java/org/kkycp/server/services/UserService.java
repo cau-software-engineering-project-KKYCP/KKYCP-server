@@ -22,7 +22,7 @@ public class UserService {
     public void registerUserTo(long projectId, String username) {
         Project project = projectRepo.findById(projectId).get();
         User user = userRepo.findByUsername(username).get();
-        user.register(project);
+        user.participate(project);
     }
 
     public void replaceUserPrivileges(String username, long projectId, List<Privilege> privileges) {
