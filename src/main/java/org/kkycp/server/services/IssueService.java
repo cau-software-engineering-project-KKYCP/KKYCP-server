@@ -43,7 +43,7 @@ public class IssueService {
     }
 
     public Issue getIssue(long issueid) {
-        return issueRepo.findById(issueid).get();
+        return issueRepo.findByIdFetchAll(issueid).get();
     }
 
     public List<SimpleIssueDto> getSimplifiedIssues(long projectId,

@@ -103,9 +103,15 @@ public class IssueControllerTest {
                 List.of(issueDto1, issueDto2));
 
         // Perform the request and document the response
-        this.mockMvc.perform(get("/project/{projectId}/issues", 1L))
+        this.mockMvc.perform(get("/project/{projectId}/issues", 1L)
+                        .queryParam("offset", "0")
+                        .queryParam("limit", "50"))
                 .andExpect(status().isOk())
                 .andDo(document("get-simplified-issues",
+                        queryParameters(
+                                parameterWithName("offset").description("시작 인덱스"),
+                                parameterWithName("limit").description("가져올 개수")
+                        ),
                         pathParameters(parameterWithName("projectId").description("프로젝트 id")),
                         responseFields(
                                 fieldWithPath("[].id").description("이슈의 id"),
@@ -138,6 +144,8 @@ public class IssueControllerTest {
 
         // Perform the request and document the response
         this.mockMvc.perform(get("/project/{projectId}/issues", 1L)
+                        .queryParam("offset", "0")
+                        .queryParam("limit", "50")
                         .queryParam("assignee", cond.getAssigneeName())
                         .queryParam("reporter", cond.getReporterName())
                         .queryParam("priority", cond.getPriority().toString())
@@ -148,6 +156,8 @@ public class IssueControllerTest {
                 .andDo(document("search-simplified-issues",
                         pathParameters(parameterWithName("projectId").description("프로젝트 id")),
                         queryParameters(
+                                parameterWithName("offset").description("시작 인덱스"),
+                                parameterWithName("limit").description("가져올 개수"),
                                 parameterWithName("assignee").description("필터링 할 담당자 이름"),
                                 parameterWithName("reporter").description("필터링 할 리포터 이름"),
                                 parameterWithName("priority").description("필터링 할 우선순위"),

@@ -31,7 +31,15 @@ public interface IssueRepo extends JpaRepository<Issue, Long>, IssueSearchRepo, 
 
     List<Issue> findAllByType(String string);
 
-    Optional<Issue> findById(long issueid);
+    Optional<Issue> findById(long issueId);
+
+    @Query("select i from Issue i " +
+            "left join fetch i.reporter " +
+            "left join fetch i.fixer " +
+            "left join fetch i.assignee " +
+            "left join fetch i.comments " +
+            "where i.id = :id")
+    Optional<Issue> findByIdFetchAll(@Param("id") long issueId);
 
     @Query("select i from Issue i join fetch i.comments where i.id = :id")
     Issue findByIdFetchComment(@Param("id") Long issueId);
