@@ -10,6 +10,7 @@ import org.kkycp.server.repo.issue.IssueRepo;
 import org.kkycp.server.repo.issue.IssueSearchCondition;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -21,6 +22,7 @@ public class ProjectService {
     private final ProjectRepo projectRepo;
     private final IssueRepo issueRepo;
 
+    @PreAuthorize("hasRole('ADMIN')")
     public long createProject(String projectName) {
         Project project = new Project(projectName);
 

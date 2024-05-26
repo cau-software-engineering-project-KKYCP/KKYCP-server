@@ -3,6 +3,7 @@ package org.kkycp.server.services;
 import lombok.RequiredArgsConstructor;
 import org.kkycp.server.repo.UserPrivilegeRecord;
 import org.kkycp.server.repo.UserRepo;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

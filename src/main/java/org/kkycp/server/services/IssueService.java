@@ -12,6 +12,7 @@ import org.kkycp.server.repo.issue.IssueRepo;
 import org.kkycp.server.repo.issue.IssueSearchCondition;
 import org.kkycp.server.repo.issue.IssueStatistics;
 import org.kkycp.server.repo.issue.TimeUnit;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +33,7 @@ public class IssueService {
      * @param projectId Issue가 생성된 project의 주소
      * @param report Issue의 attribution들을 담은 객체
      */
+    @PreAuthorize("@authz.hasPrivilege(#root, #projectId, T(org.kkycp.server.domain.authorization.Privilege).REPORTER)")
     public void createIssue(long projectId, String reporterName, Report report,
                             LocalDate createdDated) {
         User reporter = userRepo.findByUsername(reporterName).get();
@@ -44,7 +46,6 @@ public class IssueService {
         return issueRepo.findById(issueid).get();
     }
 
-
     public List<SimpleIssueDto> getSimplifiedIssues(long projectId,
                                                     IssueSearchCondition searchCondition,
                                                     int offset, int limit) {
@@ -55,18 +56,22 @@ public class IssueService {
                 .toList();
     }
 
-    public void changeIssueState(long issueId, Issue.Status desiredStatus) {
+
+    @PreAuthorize("@authz.canChangeIssueStatus(#root, #projectId, #desiredStatus)")
+    public void changeIssueState(long projectId, long issueId, Issue.Status desiredStatus) {
         Issue issue = issueRepo.findById(issueId).get();
         issue.changeStatus(desiredStatus);
     }
 
-    public void assignIssue(long issueId, String assigneeName) {
+    @PreAuthorize("@authz.hasPrivilege(#root, #projectId, T(org.kkycp.server.domain.authorization.Privilege).TRIAGER)")
+    public void assignIssue(long projectId, long issueId, String assigneeName) {
         User assignee = userRepo.findByUsername(assigneeName).get();
         Issue issue = issueRepo.findById(issueId).get();
         issue.assignIssue(assignee);
     }
 
-    public void markIssueFixed(long issueId, String fixerName) {
+    @PreAuthorize("@authz.isAssignedToPrincipal(#root, #issueId)")
+    public void markIssueFixed(long projectId, long issueId, String fixerName) {
         User fixer = userRepo.findByUsername(fixerName).get();
         Issue issue = issueRepo.findById(issueId).get();
         issue.fixIssue(fixer);
@@ -76,11 +81,12 @@ public class IssueService {
         return issueRepo.countIssueGroupByTime(timeUnit);
     }
 
-    public void updateIssueAttribute(long issueId,
-                                     String title,
-                                     String description,
-                                     Issue.Priority priority,
-                                     String type) {
+    @PreAuthorize("@authz.isAssignedToPrincipal(#root, #issueId) " +
+            "|| @authz.hasPrivilege(#root, #projectId, T(org.kkycp.server.domain.authorization.Privilege).TRIAGER) " +
+            "|| @authz.hasPrivilege(#root, #projectId, T(org.kkycp.server.domain.authorization.Privilege).VERIFIER)")
+    public void updateIssueAttribute(long projectId, long issueId,
+                                     String title, String description,
+                                     Issue.Priority priority, String type) {
         Issue issue = issueRepo.findById(issueId).get();
         if (hasText(title)) {
             issue.setTitle(title);

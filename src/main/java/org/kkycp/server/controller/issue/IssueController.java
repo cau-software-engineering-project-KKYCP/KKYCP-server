@@ -56,14 +56,14 @@ public class IssueController {
      *     <li>Tester: 이슈 해결 확인</li>
      *     <li>Verifier: 이슈를 close 하거나 reopen 함</li>
      *     <li>Triager: 이슈를 유저에게 할당</li>
-     *     <li>Assignee, Triager, Verifier: 이슈의 title, description, priority, status, type의 변경</li>
+     *     <li>Reporter, Triager, Verifier: 이슈의 title, description, priority, status, type의 변경</li>
      * </ol>
      */
     @PatchMapping("/project/{projectId}/issues/{issueId}")
     public void updateIssue(@PathVariable("projectId") long projectId,
                             @PathVariable("issueId") long issueId,
                             @RequestBody IssueUpdateDto.Request updateRequest) {
-        updateRequest.dispatchRequest(issueId, issueService);
+        updateRequest.dispatchRequest(projectId, issueId, issueService);
     }
 
     @GetMapping("/project/{projectId}/statistics/time")

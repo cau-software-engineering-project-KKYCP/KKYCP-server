@@ -1,5 +1,6 @@
 package org.kkycp.server.repo;
 
+import org.kkycp.server.domain.Participation;
 import org.kkycp.server.domain.Project;
 import org.kkycp.server.domain.User;
 import org.springframework.data.jpa.repository.Query;

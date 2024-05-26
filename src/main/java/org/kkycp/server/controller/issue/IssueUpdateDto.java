@@ -31,19 +31,17 @@ public class IssueUpdateDto {
         private String type;
 
         @Transactional
-        public void dispatchRequest(long issueId, IssueService issueService) {
-            if (assignee != null) {
-                issueService.assignIssue(issueId, assignee);
-            }
-
-            if (status == Issue.Status.FIXED) {
-                issueService.markIssueFixed(issueId, fixer);
-            } else if(status != null) {
-                issueService.changeIssueState(issueId, status);
-            }
-
+        public void dispatchRequest(long projectId, long issueId, IssueService issueService) {
             if (title != null || description != null || priority != null || type != null) {
-                issueService.updateIssueAttribute(issueId, title, description, priority, type);
+                issueService.updateIssueAttribute(projectId, issueId, title, description, priority, type);
+            }
+
+            if (status == Issue.Status.ASSIGNED) {
+                issueService.assignIssue(projectId,issueId, assignee);
+            } else if (status == Issue.Status.FIXED) {
+                issueService.markIssueFixed(projectId, issueId, fixer);
+            } else if(status != null) {
+                issueService.changeIssueState(projectId, issueId, status);
             }
         }
     }

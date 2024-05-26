@@ -7,6 +7,7 @@ import org.kkycp.server.domain.authorization.Privilege;
 import org.kkycp.server.exceptions.UserNotParticipatingException;
 import org.kkycp.server.repo.ProjectRepo;
 import org.kkycp.server.repo.UserRepo;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,12 +20,14 @@ public class UserService {
     private final ProjectRepo projectRepo;
     private final UserRepo userRepo;
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void registerUserTo(long projectId, String username) {
         Project project = projectRepo.findById(projectId).get();
         User user = userRepo.findByUsername(username).get();
         user.participate(project);
     }
 
+    @PreAuthorize("hasRole('ADMIN')")
     public void replaceUserPrivileges(String username, long projectId, List<Privilege> privileges) {
         User user = userRepo.findByUsernameFetchParticipation(username).get();
         Project project = projectRepo.findById(projectId).get();

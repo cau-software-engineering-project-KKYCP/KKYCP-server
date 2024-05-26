@@ -9,6 +9,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
+@Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Comment {
     @Id

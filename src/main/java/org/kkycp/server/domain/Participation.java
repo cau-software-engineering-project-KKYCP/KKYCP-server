@@ -39,7 +39,7 @@ public class Participation {
         privileges.add(Privilege.PARTICIPANT);
     }
 
-    void addPrivilege(Privilege privilege) {
+    public void addPrivilege(Privilege privilege) {
         privileges.add(privilege);
     }
 
@@ -47,7 +47,7 @@ public class Participation {
         privileges = new HashSet<>(newPrivileges);
     }
 
-    boolean hasPrivilege(Privilege privilege) {
+    public boolean hasPrivilege(Privilege privilege) {
         return privileges.contains(privilege);
     }
 
