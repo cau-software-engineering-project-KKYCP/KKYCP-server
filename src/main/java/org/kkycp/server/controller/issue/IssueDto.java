@@ -4,9 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.kkycp.server.controller.comment.CommentDto;
 import org.kkycp.server.domain.Issue;
 
 import java.time.LocalDate;
+import java.util.List;
 
 public class IssueDto {
     @Data
@@ -35,6 +37,7 @@ public class IssueDto {
         private Issue.Priority priority;
         private Issue.Status status;
         private String type;
+        private List<CommentDto.Response> comments;
 
         public static Response from(Issue issue) {
             Response response = new Response();
@@ -52,6 +55,12 @@ public class IssueDto {
             response.setPriority(issue.getPriority());
             response.setStatus(issue.getStatus());
             response.setType(issue.getType());
+
+            List<CommentDto.Response> commentDtos = issue.getComments().stream()
+                    .map(c -> new CommentDto.Response(c.getCommenter().getUsername(), c.getContent(),
+                            c.getCreatedDate()))
+                    .toList();
+            response.setComments(commentDtos);
             return response;
         }
     }

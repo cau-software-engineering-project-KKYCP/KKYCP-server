@@ -4,10 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.kkycp.server.controller.issue.*;
-import org.kkycp.server.domain.Issue;
-import org.kkycp.server.domain.Project;
-import org.kkycp.server.domain.Report;
-import org.kkycp.server.domain.User;
+import org.kkycp.server.domain.*;
 import org.kkycp.server.repo.issue.IssueSearchCondition;
 import org.kkycp.server.repo.issue.IssueStatistics;
 import org.kkycp.server.repo.issue.TimeUnit;
@@ -24,7 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.kkycp.server.util.AuthenticationUtil.insertTestUser;
+import static org.kkycp.server.util.AuthenticationTestUtil.insertTestUser;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
@@ -180,6 +177,12 @@ public class IssueControllerTest {
                 .priority(Issue.Priority.MAJOR)
                 .type("Bug")
                 .build();
+
+        User commenter1 = new User("commenter1");
+        User commenter2 = new User("commenter2");
+        issue.addComment(new Comment(commenter1, "comment content 1", LocalDate.of(2024, 6, 18)));
+        issue.addComment(new Comment(commenter1, "comment content 2", LocalDate.of(2024, 6, 19)));
+        issue.addComment(new Comment(commenter2, "comment content 3", LocalDate.of(2024, 6, 21)));
         // Set up the issue object as needed
         when(issueService.getIssue(anyLong())).thenReturn(issue);
 
@@ -197,7 +200,11 @@ public class IssueControllerTest {
                                 fieldWithPath("reported_date").description("이슈 보고 날짜"),
                                 fieldWithPath("priority").description("이슈 우선순위"),
                                 fieldWithPath("status").description("이슈 상태"),
-                                fieldWithPath("type").description("이슈 타입")
+                                fieldWithPath("type").description("이슈 타입"),
+                                fieldWithPath("comments").description("이슈의 댓글 목록"),
+                                fieldWithPath("comments.[].commenter").description("댓글 작성자"),
+                                fieldWithPath("comments.[].comment").description("댓글 내용"),
+                                fieldWithPath("comments.[].created_date").description("댓글 작성 날짜")
                         )));
     }
 
