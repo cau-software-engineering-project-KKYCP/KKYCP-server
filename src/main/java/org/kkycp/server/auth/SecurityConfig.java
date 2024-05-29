@@ -11,6 +11,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.Http403ForbiddenEntryPoint;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler;
 import org.springframework.security.web.authentication.logout.HttpStatusReturningLogoutSuccessHandler;
 import org.springframework.web.cors.CorsConfiguration;
@@ -24,10 +25,7 @@ public class SecurityConfig {
     @Profile("prod")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         applySecurityConfiguration(http);
-        http.exceptionHandling(exception -> exception.authenticationEntryPoint(
-                (request, response, authException) -> {
-                }
-        ));
+        http.exceptionHandling(exception -> exception.authenticationEntryPoint(new Http403ForbiddenEntryPoint()));
         return http.build();
     }
 
