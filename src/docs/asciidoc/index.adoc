@@ -26,7 +26,7 @@ POST /logout 으로 요청한다.
 
 === 프로젝트 생성
 
-operation::admin/add-person-to-project[snippets='http-request,path-parameters,http-response,curl-request,httpie-request']
+operation::admin/create-project[snippets='http-request,http-response,curl-request,httpie-request']
 
 === 프로젝트에 유저 추가
 
