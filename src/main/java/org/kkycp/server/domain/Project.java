@@ -57,11 +57,11 @@ public class Project {
             return false;
         }
 
-        return projectName.equals(project.projectName);
+        return id.equals(project.id);
     }
 
     @Override
     public int hashCode() {
-        return projectName.hashCode();
+        return id.hashCode();
     }
 }

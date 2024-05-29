@@ -50,17 +50,11 @@ public class Comment {
             return false;
         }
 
-        return parentIssue.equals(comment.parentIssue) && content.equals(
-                comment.content) && createdDate.equals(comment.createdDate) && commenter.equals(
-                comment.commenter);
+        return id.equals(comment.id);
     }
 
     @Override
     public int hashCode() {
-        int result = parentIssue.hashCode();
-        result = 31 * result + content.hashCode();
-        result = 31 * result + createdDate.hashCode();
-        result = 31 * result + commenter.hashCode();
-        return result;
+        return id.hashCode();
     }
 }

@@ -7,7 +7,6 @@ import org.kkycp.server.exceptions.IllegalIssueStatusTransitionException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 @Entity
 @Getter
@@ -115,13 +114,11 @@ public class Issue {
             return false;
         }
 
-        Objects.requireNonNull(id);
         return id.equals(issue.id);
     }
 
     @Override
     public int hashCode() {
-        Objects.requireNonNull(id);
         return id.hashCode();
     }
 

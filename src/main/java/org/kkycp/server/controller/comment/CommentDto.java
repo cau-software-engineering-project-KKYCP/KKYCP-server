@@ -16,6 +16,7 @@ public class CommentDto {
     @Builder
     @AllArgsConstructor
     public static class Response {
+        private long id;
         private String commenter;
         private String comment;
         private LocalDate created_date;

@@ -57,7 +57,7 @@ public class IssueDto {
             response.setType(issue.getType());
 
             List<CommentDto.Response> commentDtos = issue.getComments().stream()
-                    .map(c -> new CommentDto.Response(c.getCommenter().getUsername(), c.getContent(),
+                    .map(c -> new CommentDto.Response(c.getId(), c.getCommenter().getUsername(), c.getContent(),
                             c.getCreatedDate()))
                     .toList();
             response.setComments(commentDtos);

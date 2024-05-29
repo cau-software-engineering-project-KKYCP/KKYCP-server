@@ -16,6 +16,7 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.test.util.ReflectionTestUtils;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
@@ -190,9 +191,18 @@ public class IssueControllerTest {
 
         User commenter1 = new User("commenter1");
         User commenter2 = new User("commenter2");
-        issue.addComment(new Comment(commenter1, "comment content 1", LocalDate.of(2024, 6, 18)));
-        issue.addComment(new Comment(commenter1, "comment content 2", LocalDate.of(2024, 6, 19)));
-        issue.addComment(new Comment(commenter2, "comment content 3", LocalDate.of(2024, 6, 21)));
+        List<Comment> comments = List.of(
+                new Comment(commenter1, "comment content 1", LocalDate.of(2024, 6, 18)),
+                new Comment(commenter1, "comment content 2", LocalDate.of(2024, 6, 19)),
+                new Comment(commenter2, "comment content 3", LocalDate.of(2024, 6, 21))
+        );
+
+        for (int i = 0; i < comments.size(); i++) {
+            Comment comment = comments.get(i);
+            ReflectionTestUtils.setField(comment, "id", (long) i+1);
+            issue.addComment(comment);
+        }
+
         // Set up the issue object as needed
         when(issueService.getIssue(anyLong())).thenReturn(issue);
 
@@ -212,6 +222,7 @@ public class IssueControllerTest {
                                 fieldWithPath("status").description("이슈 상태"),
                                 fieldWithPath("type").description("이슈 타입"),
                                 fieldWithPath("comments").description("이슈의 댓글 목록"),
+                                fieldWithPath("comments.[].id").description("댓글 id"),
                                 fieldWithPath("comments.[].commenter").description("댓글 작성자"),
                                 fieldWithPath("comments.[].comment").description("댓글 내용"),
                                 fieldWithPath("comments.[].created_date").description("댓글 작성 날짜")

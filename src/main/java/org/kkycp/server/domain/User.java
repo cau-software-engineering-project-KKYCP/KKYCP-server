@@ -9,6 +9,7 @@ import org.kkycp.server.domain.authorization.Privilege;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 
 @Entity
 @Table(name = "users", uniqueConstraints = @UniqueConstraint(columnNames = "username"))
@@ -67,11 +68,11 @@ public class User {
             return false;
         }
 
-        return username.equals(user.username);
+        return Objects.equals(id, user.id);
     }
 
     @Override
     public int hashCode() {
-        return username.hashCode();
+        return Objects.hashCode(id);
     }
 }

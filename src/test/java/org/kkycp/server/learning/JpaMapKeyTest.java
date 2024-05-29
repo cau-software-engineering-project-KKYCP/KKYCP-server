@@ -21,14 +21,16 @@ public class JpaMapKeyTest {
     @Test
     void test() {
         User user1 = new User("user1");
+        em.persist(user1);
+
         Project project1 = new Project("project1");
         Project project2 = new Project("project2");
+        em.persist(project1);
+        em.persist(project2);
+
         user1.participate(project1);
         user1.participate(project2);
 
-        em.persist(project1);
-        em.persist(project2);
-        em.persist(user1);
         em.flush();
         em.clear();
 
