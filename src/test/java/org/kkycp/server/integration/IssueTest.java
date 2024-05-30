@@ -83,6 +83,23 @@ public class IssueTest extends FixtureSetupPlatform {
     }
 
     @Test
+    @WithUserDetails(value = "tester", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    void closeIssue() throws Exception {
+        testIssue.assignIssue(testUser);
+        testIssue.fixIssue(testUser);
+
+        Issue.Status status = Issue.Status.RESOLVED;
+        mockMvc.perform(
+                        patch("/project/{projectId}/issues/{issueId}", getTestProjectId(), getTestIssueId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(objectMapper.writeValueAsString(new IssueUpdateDto.Request(null, null, null, null, status, null, null)))
+                )
+                .andExpect(status().isOk());
+
+        assertThat(testIssue.getStatus()).isEqualTo(status);
+    }
+
+    @Test
     void getStatistics() throws Exception {
         mockMvc.perform(get("/project/{projectId}/statistics/time", getTestProjectId())
                         .queryParam("time_unit", TimeUnit.DAY.name()))
