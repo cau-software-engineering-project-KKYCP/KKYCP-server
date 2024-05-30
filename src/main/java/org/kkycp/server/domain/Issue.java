@@ -3,6 +3,8 @@ package org.kkycp.server.domain;
 import jakarta.persistence.*;
 import lombok.*;
 import org.kkycp.server.exceptions.IllegalIssueStatusTransitionException;
+import org.kkycp.server.exceptions.NotAssignedToUserException;
+import org.kkycp.server.exceptions.UserNotParticipatingException;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -76,6 +78,10 @@ public class Issue {
             throw new IllegalIssueStatusTransitionException();
         }
 
+        if (!assignee.isParticipated(project)) {
+            throw new UserNotParticipatingException();
+        }
+
         this.status = Status.ASSIGNED;
         this.assignee = assignee;
     }
@@ -83,6 +89,10 @@ public class Issue {
     public void fixIssue(User fixer) {
         if (!Status.FIXED.canTransitionFrom(this.status)) {
             throw new IllegalIssueStatusTransitionException();
+        }
+
+        if (!assignee.equals(fixer)) {
+            throw new NotAssignedToUserException();
         }
 
         this.status = Status.FIXED;

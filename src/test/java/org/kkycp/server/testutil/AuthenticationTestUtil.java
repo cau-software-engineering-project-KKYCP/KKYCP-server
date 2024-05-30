@@ -1,4 +1,4 @@
-package org.kkycp.server.util;
+package org.kkycp.server.testutil;
 
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

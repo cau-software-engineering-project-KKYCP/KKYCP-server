@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.kkycp.server.controller.comment.CommentController;
 import org.kkycp.server.controller.comment.CommentDto;
 import org.kkycp.server.services.CommentService;
-import org.kkycp.server.util.AuthenticationTestUtil;
+import org.kkycp.server.testutil.AuthenticationTestUtil;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;

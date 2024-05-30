@@ -2,7 +2,6 @@ package org.kkycp.server.auth;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -22,7 +21,6 @@ import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 @EnableWebSecurity
 public class SecurityConfig {
     @Bean
-    @Profile("prod")
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         applySecurityConfiguration(http);
         http.exceptionHandling(exception -> exception.authenticationEntryPoint(new Http403ForbiddenEntryPoint()));
@@ -38,9 +36,7 @@ public class SecurityConfig {
                         session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS))
 
                 .authorizeHttpRequests(
-                        request -> request
-                                .requestMatchers("/", "/index.html", "/signup", "/login").permitAll()
-                                .anyRequest().authenticated())
+                        request -> request.anyRequest().permitAll())
                 .logout(logout -> logout.logoutSuccessHandler(new HttpStatusReturningLogoutSuccessHandler()));
     }
 

@@ -65,7 +65,7 @@ public class AdminControllerTest {
                         .content(objectMapper.writeValueAsString(request))
                         .contentType(MediaType.APPLICATION_JSON)
                         .accept(MediaType.APPLICATION_JSON)
-        ).andDo(document("project/create",
+        ).andDo(document("admin/create-project",
                         requestFields(
                                 fieldWithPath("project_name").description(
                                         "추가할 프로젝트 이름. 이미 있는 이름 사용시, 409 Conflict로 에러 json과 함께 응답.")

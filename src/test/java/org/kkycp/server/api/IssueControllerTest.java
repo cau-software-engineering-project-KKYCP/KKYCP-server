@@ -22,7 +22,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import java.time.LocalDate;
 import java.util.List;
 
-import static org.kkycp.server.util.AuthenticationTestUtil.insertTestUser;
+import static org.kkycp.server.testutil.AuthenticationTestUtil.insertTestUser;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.when;
