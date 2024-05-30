@@ -140,6 +140,7 @@ public class Issue {
         TRIVIAL
     }
 
+    @Getter
     public enum Status {
         NEW(null),
         ASSIGNED(NEW),

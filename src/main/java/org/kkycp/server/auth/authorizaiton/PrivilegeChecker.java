@@ -104,12 +104,7 @@ public class PrivilegeChecker {
         User user = getUser(operations);
         Project project = projectRepo.findById(projectId).get();
 
-        if (desiredStatus == Issue.Status.RESOLVED) {
-            return user.hasPrivilege(project, Privilege.TESTER);
-        } else if (desiredStatus == Issue.Status.CLOSED || desiredStatus == Issue.Status.REOPENED) {
-            return user.hasPrivilege(project, Privilege.VERIFIER);
-        }
-
-        return false;
+        return user.hasPrivilege(project, Privilege.TESTER)
+                || user.hasPrivilege(project, Privilege.VERIFIER);
     }
 }
