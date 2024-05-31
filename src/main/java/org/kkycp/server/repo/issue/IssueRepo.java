@@ -1,8 +1,8 @@
 package org.kkycp.server.repo.issue;
 
 import org.kkycp.server.domain.Issue;
-import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
 import org.springframework.lang.NonNull;
 
@@ -10,7 +10,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-public interface IssueRepo extends JpaRepository<Issue, Long>, IssueSearchRepo, IssueStatisticsRepo{
+public interface IssueRepo extends CrudRepository<Issue, Long>, IssueSearchRepo, IssueStatisticsRepo{
     /**
      * statistical method for counting issues between two dates.
      *<p>

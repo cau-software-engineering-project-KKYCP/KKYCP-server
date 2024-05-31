@@ -1,7 +1,7 @@
 package org.kkycp.server.repo;
 
 import org.kkycp.server.domain.Comment;
-import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.repository.CrudRepository;
 
-public interface CommentRepo extends JpaRepository<Comment, Long> {
+public interface CommentRepo extends CrudRepository<Comment, Long> {
 }
