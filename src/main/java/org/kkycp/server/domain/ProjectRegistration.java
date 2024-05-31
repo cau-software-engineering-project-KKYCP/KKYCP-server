@@ -61,5 +61,4 @@ public class ProjectRegistration {
         }
         return participation;
     }
-    //TODO: AUTHORIZATION CHECKING
 }
