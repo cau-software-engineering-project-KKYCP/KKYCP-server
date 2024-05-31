@@ -14,6 +14,8 @@ import org.springframework.security.access.expression.method.MethodSecurityExpre
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.function.BooleanSupplier;
+
 @Component("authz")
 @RequiredArgsConstructor
 @Transactional
@@ -24,7 +26,7 @@ public class PrivilegeChecker {
     private final IssueRepo issueRepo;
     private final ParticipationRepo participationRepo;
 
-    public boolean hasPrivilege(MethodSecurityExpressionOperations operations, long projectId, Privilege requiredPrivilege) {
+    private boolean doBasicAuthWith(MethodSecurityExpressionOperations operations, BooleanSupplier customChecker) {
         if (!operations.isAuthenticated() || operations.isAnonymous()) {
             return false;
         }
@@ -33,11 +35,17 @@ public class PrivilegeChecker {
             return true;
         }
 
-        String username = getUsername(operations);
+        return customChecker.getAsBoolean();
+    }
 
-        Participation participation = participationRepo.findParticipation(username, projectId)
-                .orElseThrow(UserNotParticipatingException::new);
-        return participation.hasPrivilege(requiredPrivilege);
+    public boolean hasPrivilege(MethodSecurityExpressionOperations operations, long projectId, Privilege requiredPrivilege) {
+        return doBasicAuthWith(operations, () -> {
+            String username = getUsername(operations);
+
+            Participation participation = participationRepo.findParticipation(username, projectId)
+                    .orElseThrow(UserNotParticipatingException::new);
+            return participation.hasPrivilege(requiredPrivilege);
+        });
     }
 
     private static String getUsername(MethodSecurityExpressionOperations operations) {
@@ -46,45 +54,27 @@ public class PrivilegeChecker {
     }
 
     public boolean isCommentOwner(MethodSecurityExpressionOperations operations, long commentId) {
-        if (!operations.isAuthenticated() || operations.isAnonymous()) {
-            return false;
-        }
-
-        if (operations.hasRole("ADMIN")) {
-            return true;
-        }
-
-        Comment comment = commentRepo.findById(commentId).get();
-        User user = getUser(operations);
-        return comment.getCommenter() == user;
+        return doBasicAuthWith(operations, () -> {
+            Comment comment = commentRepo.findById(commentId).get();
+            User user = getUser(operations);
+            return comment.getCommenter() == user;
+        });
     }
 
     public boolean isReportedByPrincipal(MethodSecurityExpressionOperations operations, long issueId) {
-        if (!operations.isAuthenticated() || operations.isAnonymous()) {
-            return false;
-        }
-
-        if (operations.hasRole("ADMIN")) {
-            return true;
-        }
-
-        Issue issue = issueRepo.findById(issueId).get();
-        User user = getUser(operations);
-        return issue.getReporter() == user;
+        return doBasicAuthWith(operations, () -> {
+            Issue issue = issueRepo.findById(issueId).get();
+            User user = getUser(operations);
+            return issue.getReporter() == user;
+        });
     }
 
     public boolean isAssignedToPrincipal(MethodSecurityExpressionOperations operations, long issueId) {
-        if (!operations.isAuthenticated() || operations.isAnonymous()) {
-            return false;
-        }
-
-        if (operations.hasRole("ADMIN")) {
-            return true;
-        }
-
-        Issue issue = issueRepo.findById(issueId).get();
-        User user = getUser(operations);
-        return issue.getAssignee() == user;
+        return doBasicAuthWith(operations, () -> {
+            Issue issue = issueRepo.findById(issueId).get();
+            User user = getUser(operations);
+            return issue.getAssignee() == user;
+        });
     }
 
     private User getUser(MethodSecurityExpressionOperations operations) {
@@ -93,18 +83,12 @@ public class PrivilegeChecker {
     }
 
     public boolean canChangeIssueStatus(MethodSecurityExpressionOperations operations, long projectId, Issue.Status desiredStatus) {
-        if (!operations.isAuthenticated() || operations.isAnonymous()) {
-            return false;
-        }
+        return doBasicAuthWith(operations, () -> {
+            User user = getUser(operations);
+            Project project = projectRepo.findById(projectId).get();
 
-        if (operations.hasRole("ADMIN")) {
-            return true;
-        }
-
-        User user = getUser(operations);
-        Project project = projectRepo.findById(projectId).get();
-
-        return user.hasPrivilege(project, Privilege.TESTER)
-                || user.hasPrivilege(project, Privilege.VERIFIER);
+            return user.hasPrivilege(project, Privilege.TESTER)
+                    || user.hasPrivilege(project, Privilege.VERIFIER);
+        });
     }
 }
