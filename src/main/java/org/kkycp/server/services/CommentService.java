@@ -25,7 +25,7 @@ public class CommentService {
     public void commentIssue(long projectId, long issueId, String commenterName, String content, LocalDate createdDate){
         Issue issue = issueRepo.findById(issueId).get();
         User commenter = userRepo.findByUsername(commenterName).get();
-        Comment comment= new Comment(commenter, content, createdDate);
+        Comment comment = new Comment(commenter, content, createdDate);
         issue.addComment(comment);
     }
 

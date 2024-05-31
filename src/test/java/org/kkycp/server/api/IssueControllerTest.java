@@ -141,14 +141,19 @@ public class IssueControllerTest {
         when(issueService.getSimplifiedIssues(anyLong(), any(IssueSearchCondition.class), anyInt(), anyInt())).thenReturn(
                 List.of(issueDto2));
 
-        SearchConditionDto cond = new SearchConditionDto(null, "test reporter", Issue.Priority.TRIVIAL, Issue.Status.NEW, "ss", "Feature");
+        SearchConditionDto cond = new SearchConditionDto();
+        cond.setReporter("test reporter");
+        cond.setPriority(Issue.Priority.TRIVIAL);
+        cond.setStatus(Issue.Status.NEW);
+        cond.setTitle("ss");
+        cond.setType("Feature");
 
         // Perform the request and document the response
         this.mockMvc.perform(get("/project/{projectId}/issues", 1L)
                         .queryParam("offset", "0")
                         .queryParam("limit", "50")
-                        .queryParam("assignee", cond.getAssigneeName())
-                        .queryParam("reporter", cond.getReporterName())
+                        .queryParam("assignee", cond.getAssignee())
+                        .queryParam("reporter", cond.getReporter())
                         .queryParam("priority", cond.getPriority().toString())
                         .queryParam("status", cond.getStatus().toString())
                         .queryParam("title", cond.getTitle())

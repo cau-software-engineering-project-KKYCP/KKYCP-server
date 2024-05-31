@@ -1,13 +1,19 @@
 package org.kkycp.server.integration;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import org.junit.jupiter.api.Test;
 import org.kkycp.server.controller.issue.IssueDto;
 import org.kkycp.server.controller.issue.IssueUpdateDto;
+import org.kkycp.server.controller.issue.SimpleIssueDto;
 import org.kkycp.server.domain.Issue;
+import org.kkycp.server.domain.User;
 import org.kkycp.server.repo.issue.TimeUnit;
 import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
+import org.springframework.test.web.servlet.MvcResult;
+
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.from;
@@ -27,12 +33,52 @@ public class IssueTest extends FixtureSetupPlatform {
     }
 
     @Test
-    void searchIssue() throws Exception {
-        mockMvc.perform(
-                        get("/project/{projectId}/issues", getTestProjectId()).queryParam("reporter",
-                                testUser.getUsername()).queryParam("status", testIssue.getStatus().name()))
+    void searchIssue_ofTheReporter() throws Exception {
+        List<Issue> testIssues = List.of(setupIssue(testUser, "test1"), setupIssue(testUser, "test2"),
+                setupIssue(testUser, "test3"), setupIssue(testUser, "test4"));
+        User assignee = setupUserWith("tester assignee1");
+
+        for (int i = 0; i < 2; i++) {
+            Issue issue = testIssues.get(i);
+            issue.assignIssue(assignee);
+        }
+
+        MvcResult result = mockMvc.perform(
+                        get("/project/{projectId}/issues", getTestProjectId())
+                                .queryParam("limit", "20")
+                                .queryParam("reporter", testUser.getUsername()))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.[0].id").value(testIssue.getId()));
+                .andReturn();
+
+        List<SimpleIssueDto> responses = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {});
+        assertThat(responses).extracting(SimpleIssueDto::getId)
+                .contains(testIssue.getId())
+                .contains(testIssues.get(0).getId(), testIssues.get(1).getId(),
+                        testIssues.get(2).getId(), testIssues.get(3).getId());
+    }
+
+    @Test
+    void searchIssue_ofTheAssignee() throws Exception {
+        List<Issue> testIssues = List.of(setupIssue(testUser, "test1"), setupIssue(testUser, "test2"),
+                setupIssue(testUser, "test3"), setupIssue(testUser, "test4"));
+        User assignee = setupUserWith("tester assignee1");
+
+        for (int i = 0; i < 2; i++) {
+            Issue issue = testIssues.get(i);
+            issue.assignIssue(assignee);
+        }
+
+        MvcResult result = mockMvc.perform(
+                        get("/project/{projectId}/issues", getTestProjectId())
+                                .queryParam("assignee", assignee.getUsername()))
+                .andExpect(status().isOk())
+                .andReturn();
+
+        List<SimpleIssueDto> responses = objectMapper.readValue(result.getResponse().getContentAsString(), new TypeReference<>() {});
+        assertThat(responses).extracting(SimpleIssueDto::getId)
+                .contains(testIssues.get(0).getId(), testIssues.get(1).getId())
+                .doesNotContain(testIssues.get(2).getId(), testIssues.get(3).getId());
+
     }
 
     @Test

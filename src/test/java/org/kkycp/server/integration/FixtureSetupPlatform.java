@@ -49,32 +49,38 @@ public abstract class FixtureSetupPlatform extends SessionSharing_Security_Class
 
         setupUsers();
 
-        testIssue = new Issue(testProject, testUser, "test issue", "test description",
-                Issue.Priority.MAJOR, LocalDate.of(2024, 4, 28), "Bug");
-        issueRepo.save(testIssue);
+        testIssue = setupIssue(testUser, "test issue");
 
         testComment = new Comment(testUser, "comment content", LocalDate.of(2024, 5, 10));
         testIssue.addComment(testComment);
     }
 
-    private void setupUsers() {
-        testUser = addUserWith("test");
-        reporter = addUserWith("reporter", Privilege.REPORTER);
-        triager = addUserWith("triager", Privilege.TRIAGER);
-        tester = addUserWith("tester", Privilege.TESTER);
-        verifier = addUserWith("verifier", Privilege.VERIFIER);
+    protected Issue setupIssue(User reporter, String title) {
+        Issue issue = new Issue(testProject, reporter, title, "test description",
+                Issue.Priority.MAJOR, LocalDate.of(2024, 4, 28), "Bug");
+        issueRepo.save(issue);
+        return issue;
     }
 
-    private User addUserWith(String username, Privilege... privileges) {
+    private void setupUsers() {
+        testUser = setupUserWith("test");
+        reporter = setupUserWith("reporter", Privilege.REPORTER);
+        triager = setupUserWith("triager", Privilege.TRIAGER);
+        tester = setupUserWith("tester", Privilege.TESTER);
+        verifier = setupUserWith("verifier", Privilege.VERIFIER);
+    }
+
+    protected User setupUserWith(String username, Privilege... privileges) {
         AuthUserDetails authUserDetails = new AuthUserDetails(username, "Bcrypted password");
         authUserDetailsRepo.save(authUserDetails);
 
         User newUser = new User(username);
+        userRepo.save(newUser);
         newUser.participate(testProject);
+
         for (Privilege privilege : privileges) {
             newUser.addPrivilege(testProject, privilege);
         }
-        userRepo.save(newUser);
         return newUser;
     }
 
