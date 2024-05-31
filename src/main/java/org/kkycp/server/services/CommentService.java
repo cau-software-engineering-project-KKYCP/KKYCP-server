@@ -21,8 +21,8 @@ public class CommentService {
     private final CommentRepo commentRepo;
     private final UserRepo userRepo;
 
-    @PreAuthorize("@authz.hasPrivilege(#root, #issueId, T(org.kkycp.server.domain.authorization.Privilege).PARTICIPANT)")
-    public void commentIssue(long issueId, String commenterName, String content, LocalDate createdDate){
+    @PreAuthorize("@authz.hasPrivilege(#root, #projectId, T(org.kkycp.server.domain.authorization.Privilege).PARTICIPANT)")
+    public void commentIssue(long projectId, long issueId, String commenterName, String content, LocalDate createdDate){
         Issue issue = issueRepo.findById(issueId).get();
         User commenter = userRepo.findByUsername(commenterName).get();
         Comment comment= new Comment(commenter, content, createdDate);

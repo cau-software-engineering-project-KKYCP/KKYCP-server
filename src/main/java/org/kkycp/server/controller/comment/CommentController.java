@@ -21,7 +21,7 @@ public class CommentController {
                             @PathVariable("issueId") long issueId,
                             @RequestBody CommentDto.Request request,
                             @AuthenticationPrincipal UserDetails authUser) {
-        commentService.commentIssue(issueId, authUser.getUsername(), request.getComment(), LocalDate.now());
+        commentService.commentIssue(projectId, issueId, authUser.getUsername(), request.getComment(), LocalDate.now());
     }
 
     //put comment

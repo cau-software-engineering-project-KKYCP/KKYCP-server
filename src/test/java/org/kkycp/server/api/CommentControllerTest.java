@@ -44,7 +44,7 @@ public class CommentControllerTest {
         request.setComment("Test comment");
 
         AuthenticationTestUtil.insertTestUser();
-        Mockito.doNothing().when(commentService).commentIssue(anyLong(), anyString(), anyString(), any(LocalDate.class));
+        Mockito.doNothing().when(commentService).commentIssue(anyLong(), anyLong(), anyString(), anyString(), any(LocalDate.class));
 
         mockMvc.perform(post("/project/{projectId}/issues/{issueId}/comments", 1L, 1L)
                         .contentType(MediaType.APPLICATION_JSON)

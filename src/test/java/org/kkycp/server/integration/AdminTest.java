@@ -8,7 +8,9 @@ import org.kkycp.server.controller.admin.UserRegisterDto;
 import org.kkycp.server.controller.project.ProjectDto;
 import org.kkycp.server.domain.User;
 import org.kkycp.server.domain.authorization.Privilege;
+import org.kkycp.server.exceptions.UserNotParticipatingException;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.TestExecutionEvent;
 import org.springframework.security.test.context.support.WithUserDetails;
 import org.springframework.test.web.servlet.MvcResult;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +19,7 @@ import java.util.List;
 import java.util.Objects;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -65,6 +68,27 @@ public class AdminTest extends FixtureSetupPlatform {
         assertThat(participatedUser.hasPrivilege(testProject, Privilege.PARTICIPANT))
                 .isTrue();
     }
+
+    @Test
+    @WithUserDetails(value = "test", setupBefore = TestExecutionEvent.TEST_EXECUTION)
+    void nonAdmin_cannotAddUserToTheProject() throws Exception {
+        String toBeParticipated = "user to add";
+        setupTestUser(toBeParticipated);
+
+        UserRegisterDto.Request request = new UserRegisterDto.Request();
+        request.setUsername(toBeParticipated);
+
+        mockMvc.perform(post("/project/{projectId}/users", getTestProjectId())
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(request)))
+                .andExpect(status().isForbidden());
+
+        User participatedUser = userRepo.findByUsername(toBeParticipated).get();
+        assertThatThrownBy(() -> participatedUser.hasPrivilege(testProject, Privilege.PARTICIPANT))
+                .isInstanceOf(UserNotParticipatingException.class);
+    }
+
+
 
     @Test
     void lookupPrivileges() throws Exception {
