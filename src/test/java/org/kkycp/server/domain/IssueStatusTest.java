@@ -1,5 +1,6 @@
 package org.kkycp.server.domain;
 
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
@@ -22,7 +23,8 @@ public class IssueStatusTest {
 
     @ParameterizedTest
     @MethodSource("statusTransitions")
-    void issueTransitionValid(Issue.Status currentStatus, Issue.Status desiredStatus) {
+    @DisplayName("Validate issue status transition")
+    void issueStatusTransitionValid(Issue.Status currentStatus, Issue.Status desiredStatus) {
         assertThat(desiredStatus.canTransitionFrom(currentStatus)).isTrue();
     }
 

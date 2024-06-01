@@ -8,7 +8,7 @@ import org.springframework.http.MediaType;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-public class SessionTest extends SessionSharing_Security_ClassLevelRollBack_Platform {
+public class SessionTest extends SessionSharing_SecurityApplied_RollBackAfterTest_Platform {
 
     @Test
     @Order(0)

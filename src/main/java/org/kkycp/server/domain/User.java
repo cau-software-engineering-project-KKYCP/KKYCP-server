@@ -44,7 +44,7 @@ public class User {
 
     /**
      *
-     * @param privileges even though participation privilege is not specified, it always gets in.
+     * @param privileges even though PARTICIPATION privilege is not specified, it always gets in.
      */
     public void replacePrivileges(Project grantedProject, Collection<Privilege> privileges) {
         projectRegistration.replacePrivileges(grantedProject, privileges);

@@ -17,7 +17,7 @@ import static org.springframework.test.web.servlet.setup.SharedHttpSessionConfig
 @SpringBootTest
 @Transactional
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public abstract class SessionSharing_Security_ClassLevelRollBack_Platform {
+public abstract class SessionSharing_SecurityApplied_RollBackAfterTest_Platform {
 
     protected static MockMvc mockMvc;
 

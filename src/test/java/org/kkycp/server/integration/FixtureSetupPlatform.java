@@ -16,7 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.time.LocalDate;
 
-public abstract class FixtureSetupPlatform extends SessionSharing_Security_ClassLevelRollBack_Platform {
+public abstract class FixtureSetupPlatform extends SessionSharing_SecurityApplied_RollBackAfterTest_Platform {
     @Autowired
     protected AuthUserDetailsRepo authUserDetailsRepo;
 

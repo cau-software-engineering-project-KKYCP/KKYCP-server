@@ -20,6 +20,9 @@ import static org.springframework.restdocs.request.RequestDocumentation.paramete
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+/**
+ * Test for signup and authentication
+ */
 @SpringBootTest
 @AutoConfigureRestDocs
 @AutoConfigureMockMvc(printOnlyOnFailure = false)
