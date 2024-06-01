@@ -1,35 +1,22 @@
-+  Comment
+# KKYCP 백엔드 서버
 
-Comment 관리를 위한 CommentService 클래스 추가
+본 프로젝트는 중앙대 2024학년 봄학기 소프트웨어공학 수업 팀 프로젝트의 백엔드 서버입니다.
 
-Issue를 가져오기 위해 IssueService클래스에 findIssue 메소드 추가
+## 사용 프레임워크
 
-findIssue내에서 IsssuRepo.findbyId(issueid)를 통해 id 탐색
+- Spring boot for Spring web
+- Spring security
+- JPA
+- QueryDsl
 
-CommentRepo를 통해 Comment 저장, 삭제, 수정 실행
+## 실행 방법 (윈도우 기준)
 
+1. jdk/bin을 path에 추가하고, JAVA_HOME을 환경변수에 추가한다.
+2. 터미널 실행
+3. 프로젝트 폴더(KKYCP-server) 에서`./gradlew build`입력
+4. `./gradlew bootJar`입력
+5. `java -jar ./build/libs/server-**.jar` 명령어를 통해 jar파일 실행
 
-+  Issue description
+> java 명령어는 jdk 설치 후, {설치한 jdk 폴더}/bin 경로를 PATH에 추가하면 사용 가능
 
-
-IssueService에 getDescription메소드 추가
-
-사실상 findIssue와 같은 Issue를 반환하는 기능이라 필요성이 있는지 잘 모르겠네요 ..
-
-+  Statistics
-
-ProjectService의 ShowReportStatistics 메소드
-
-CountIssueRepo 인터페이스 구현 필요
-
-filter라는 새로운 도메인 모델 만들어서
-
-선택에 따라 날짜, 우선순위, 상태 통계 보여주도록 설정
-
-issueList 반환
-
-+  의문점
-
-findIssue와 getDescription 기능이 겹침
-
-CountIssueRepo라는 다른 인터페이스 만듦 기존에 IssueRepo 있지만 Project 파라미터 필요할 것 같아 새로 만듦
+> 만약 8080포트가 이미 사용중이라고 뜨면, [PowerShell에서 해당 프로세스를 kill](https://stackoverflow.com/a/39633428)한 뒤 다시 실행
